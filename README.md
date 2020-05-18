@@ -556,6 +556,20 @@ Bad:
 const A = <A x={true} />;
 ```
 
+### Attribute quotes
+
+Attributes should use single quotes.
+
+Good:
+```jsx
+const A = <A x='good' />;
+```
+
+Bad:
+```jsx
+const A = <A x="bad" />;
+```
+
 ### Attribute curly bracket spacing
 
 Attributes should have no space between curly brackets and inner expression.
@@ -570,7 +584,7 @@ Bad:
 const A = <A x={ x } />;
 ```
 
-### Extra attribute curly brackets
+### Essential attribute curly brackets
 
 Attribute curly brackets should be **omitted** unless they are required for logic or to improve readabilty.
 
