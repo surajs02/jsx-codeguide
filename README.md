@@ -13,7 +13,7 @@ Contents:
 
 Code qualities make code **easier to maintain**.
 
-A code quality is not met if you answering **yes** to **any** of the following anti-quality questions hence suggests a **rethink** is needed.
+Answering **yes** to **any** of the following anti-quality questions indicates the respective quality is not met hence may need a **rethink**.
 
 |#|Quality|Anti-quality question|
 |---|---|---|
@@ -24,7 +24,7 @@ A code quality is not met if you answering **yes** to **any** of the following a
 5.|**Unique**|Is there repetition?|
 6.|**Functional**|Does the code not work as expected?|
 7.|**Graceful**|Do errors impact functionality?|
-8.|**Focused**|Does the code have many responsibilities/purposes/functionalities?|
+8.|**Focused**|Does the code have many responsibilities?|
 9.|**Essential**|Is the code unused?|
 10.|**Pure**|Are there obsolete mutations?|
 
@@ -60,7 +60,7 @@ console.log(b);
 
 ### Implicit boolean conditionals
 
-Implicit use of truthy/false conditionals is only for boolean types, other types **must** use explicit conditionals.
+Implicit use of truthy/falsy conditionals should only be applied to boolean types. Other types **must** use explicit conditionals.
 
 Good:
 ```js
