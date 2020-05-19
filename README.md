@@ -172,6 +172,32 @@ console.log('Unused code that may be required later');
 
 ## JS Styles
 
+### Comments
+
+Comments describe *what* the nature of a problem is, shouldn't impact readability, and should be:
+- Concise
+- Prepended with a `TODO:` tag if the comment requires review
+- Single line
+- Sentence-cased
+- End with a period
+
+Good:
+```js
+// Good.
+
+if (true) return true; // Good since doesn't impact readability.
+```
+
+Bad:
+```js
+// bad
+/* bad */
+
+if (true)
+// Bad since impacts readability.
+return true;
+```
+
 ### Unary Operator Spacing
 
 Word unary operators (e.g., `typeof`) should have a space either side of the operator whilst nonword unary operators (e.g., `++`) should be prepended with a space.
