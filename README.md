@@ -2,12 +2,46 @@
 
 Guidelines to promote JSX code maintainability.
 
-Contents:
-- [Qualities](#qualities)
-- [JS Logic](#js-logic)
-- [JS Styles](#js-styles)
-- [JSX Logic](#jsx-styles)
-- [JSX Styles](#jsx-styles)
+- [JSX Codeguide](#jsx-codeguide)
+    - [Qualities](#qualities)
+    - [JS Logic](#js-logic)
+        - [Prefer Constants](#prefer-constants)
+        - [Implicit Boolean Conditionals](#implicit-boolean-conditionals)
+        - [Simple Conditionals](#simple-conditionals)
+        - [Simple Control Paths](#simple-control-paths)
+        - [Unused Code](#unused-code)
+    - [JS Styles](#js-styles)
+        - [Unary Operator Spacing](#unary-operator-spacing)
+        - [Binary Operator Spacing](#binary-operator-spacing)
+        - [Operator Linebreaks](#operator-linebreaks)
+        - [Trailing Commas](#trailing-commas)
+        - [Comma Spacing](#comma-spacing)
+        - [Semicolon Presence](#semicolon-presence)
+        - [Extra Parentheses](#extra-parentheses)
+        - [Curly Bracket Style](#curly-bracket-style)
+        - [Curly Bracket Presence](#curly-bracket-presence)
+        - [Object Curly Bracket Spacing](#object-curly-bracket-spacing)
+        - [Object Colon Spacing](#object-colon-spacing)
+        - [Quote Presence](#quote-presence)
+        - [Arrow Function Parentheses](#arrow-function-parentheses)
+        - [Arrow Function Body](#arrow-function-body)
+        - [Arrow Function Arrow Spacing](#arrow-function-arrow-spacing)
+    - [JSX Logic](#jsx-logic)
+        - [Attribute Types](#attribute-types)
+        - [Default Types](#default-types)
+        - [Recursive Updates](#recursive-updates)
+        - [Indirect State Mutation](#indirect-state-mutation)
+        - [Safe Attributes](#safe-attributes)
+    - [JSX Styles](#jsx-styles)
+        - [Implicit Boolean Attribute](#implicit-boolean-attribute)
+        - [Attribute Quotes](#attribute-quotes)
+        - [Attribute Curly Bracket Spacing](#attribute-curly-bracket-spacing)
+        - [Attribute Curly Brackets Presence](#attribute-curly-brackets-presence)
+        - [Attribute Indentation](#attribute-indentation)
+        - [Unique Attributes](#unique-attributes)
+        - [Unique Key Attribute](#unique-key-attribute)
+        - [Extra Closing Tag](#extra-closing-tag)
+        - [Ordered Lifecycle Methods](#ordered-lifecycle-methods)
 
 ## Qualities
 
@@ -17,20 +51,20 @@ Answering **yes** to **any** of the following anti-quality questions indicates t
 
 |#|Quality|Anti-quality question|
 |---|---|---|
-1.|**Readable**|Is the code difficult to understand?|
-2.|**Explicit**|Do you have to think about what the code does?|
-3.|**Simple**|Is there lots of code or is it difficult to write?|
-4.|**Consistent**|Does the code look or work differently than existing code?|
-5.|**Unique**|Is there repetition?|
-6.|**Functional**|Does the code not work as expected?|
-7.|**Graceful**|Do errors impact functionality?|
-8.|**Focused**|Does the code have many responsibilities?|
-9.|**Essential**|Is the code unused?|
-10.|**Pure**|Are there obsolete mutations?|
+|1|**Readable**|Is the code difficult to understand?|
+|2|**Explicit**|Do you have to think about what the code does?|
+|3|**Simple**|Is there lots of code or is it difficult to write?|
+|4|**Consistent**|Does the code look or work differently than existing code?|
+|5|**Unique**|Is there repetition?|
+|6|**Functional**|Does the code not work as expected?|
+|7|**Graceful**|Do errors impact functionality?|
+|8|**Focused**|Does the code have many responsibilities?|
+|9|**Essential**|Is the code unused?|
+|10|**Pure**|Are there obsolete mutations?|
 
 ## JS Logic
 
-### Constants
+### Prefer Constants
 
 Variables should be `const` unless logic requires mutation.
 
@@ -58,7 +92,7 @@ let b = 2; // Obsolete since its immutable.
 console.log(b);
 ```
 
-### Implicit boolean conditionals
+### Implicit Boolean Conditionals
 
 Implicit use of truthy/falsy conditionals should only be applied to boolean types. Other types **must** use explicit conditionals.
 
@@ -83,7 +117,7 @@ const i = 0;
 if (n || u || !i) console.log('Bad');
 ```
 
-### Simple conditionals
+### Simple Conditionals
 
 Conditionals should be simple, explicit, and readable hence should not include complexities (e.g., expanding a boolean expression into a ternary).
 
@@ -102,7 +136,7 @@ const b = a > 0 ? true : false;
 const c = a > 0 !== false; // Never use inverted complex booleans like `x !== false`.
 ```
 
-### Simple control paths
+### Simple Control Paths
 
 Conditional paths should be simple hence should not have complexities (e.g., `return` in `else` when `if` contains `return`).
 
@@ -120,13 +154,13 @@ if (a) return n;
 else return m;
 ```
 
-### Unused code
+### Unused Code
 
 Unused code should be removed. If the code may be required at a later date, it should be commentted with an explaination.
 
 Good:
 ```js
-// TODO: Don't remove this code as it may be required for xyz. 
+// TODO: Don't remove this code since it may be required for xyz. 
 // console.log('Unused code that may be required later')
 ```
 
@@ -138,7 +172,7 @@ console.log('Unused code that may be required later');
 
 ## JS Styles
 
-### Unary operator spacing
+### Unary Operator Spacing
 
 Word unary operators (e.g., `typeof`) should have a space either side of the operator whilst nonword unary operators (e.g., `++`) should be prepended with a space.
 
@@ -154,7 +188,7 @@ const a = typeof{};
 const b =++[].length;
 ```
 
-### Binary operator spacing
+### Binary Operator Spacing
 
 Binary operators should have a space either side of the operator.
 
@@ -170,7 +204,7 @@ const a = 1+2;
 const b = 3+++4;
 ```
 
-### Operator linebreaks
+### Operator Linebreaks
 
 Operators should prepend an expression when separated into a newline.
 
@@ -195,7 +229,7 @@ const c = a === 1 ? 1
     : 2;
 ```
 
-### Trailing commas
+### Trailing Commas
 
 Commas should only trail in **multiline** structures such as objects and arrays.
 
@@ -223,7 +257,7 @@ const a2 = [
 ];
 ```
 
-### Comma spacing
+### Comma Spacing
 
 Non-trailing commas should be followed by a space.
 
@@ -239,7 +273,7 @@ const a = 1 ,b = 2;
 const c = { n: 1 , m: 2 };
 ```
 
-### Semicolons
+### Semicolon Presence
 
 **All** statements should end with a semicolon.
 
@@ -253,7 +287,7 @@ Bad:
 const a = 1
 ```
 
-### Extra parentheses
+### Extra Parentheses
 
 Parentheses should be **omitted** unless they are required for logic or to improve readabilty.
 
@@ -267,7 +301,7 @@ Bad:
 const a = b + c;
 ```
 
-### Curly bracket style
+### Curly Bracket Style
 
 Control statements with curly brackets should follow K&R-1TBS indentation (i.e., space separated opening brackets on the same line as control statement where curly brackets can be omitted if not required by logic).
 
@@ -292,7 +326,7 @@ else
 }
 ```
 
-### Curly brackets
+### Curly Bracket Presence
 
 Curly brackets should only be used when required for logic or readability. E.g., curly brackets are only used with control statements (e.g., `if`, `else`, etc.) when they contain a statement block.
 
@@ -317,7 +351,7 @@ else {
 }
 ```
 
-### Object curly bracket spacing
+### Object Curly Bracket Spacing
 
 Object curly brackets should have a space between inside content and the brackets.
 
@@ -331,23 +365,7 @@ Bad:
 const a = {n: 1};
 ```
 
-### Quotes
-
-Prefer single quotes for all strings and only used backticks if required for logic or readability.
-
-Good:
-```js
-const a = 'good';
-const b = `also [${a}]`;
-```
-
-Bad:
-```js
-const a = "bad";
-const b = `bad`;
-```
-
-### Object colon spacing
+### Object Colon Spacing
 
 Object colons should be prepended with a space.
 
@@ -362,7 +380,7 @@ const a = { n:1 };
 const b = { n :1 };
 ```
 
-### Quotes
+### Quote Presence
 
 Prefer single quotes for all strings and only used backticks if required for logic or readability.
 
@@ -378,7 +396,7 @@ const a = "bad";
 const b = `bad`;
 ```
 
-### Arrow function parentheses
+### Arrow Function Parentheses
 
 Arrow function parentheses should be omitted unless required for logic (e.g., 2+ parameters).
 
@@ -395,7 +413,7 @@ Bad:
 const a = (x) => {};
 ```
 
-### Arrow function body
+### Arrow Function Body
 
 Curly brackets should be omitted in arrow function bodies unless required for logic.
 
@@ -415,7 +433,7 @@ const a = () => {
 };
 ```
 
-### Arrow function arrow spacing
+### Arrow Function Arrow Spacing
 
 An arrow function arrow should have space either side.
 
@@ -433,7 +451,7 @@ const a = ()=>console.log('bad');
 
 ## JSX Logic
 
-### Specify attribute types
+### Attribute Types
 
 Components should specify `propTypes`.
 
@@ -460,7 +478,7 @@ const A = createReactClass({
 });
 ```
 
-### Specify default types
+### Default Types
 
 Components should specify `getDefaultProps` if required by logic.
 
@@ -487,7 +505,7 @@ const A = createReactClass({
 });
 ```
 
-### Avoid recursive updates
+### Recursive Updates
 
 Components should avoid recursive or frequent updates (e.g., uncontrolled `setState` in `componentDidUpdate`).
 
@@ -511,7 +529,7 @@ const A = createReactClass({
 });
 ```
 
-### Indirect state mutation
+### Indirect State Mutation
 
 Components should not directly mutate state.
 
@@ -525,7 +543,7 @@ Bad:
 this.state.x = 'bad';
 ```
 
-### Safe attributes
+### Safe Attributes
 
 Components should not use dangerous attributes (e.g., `dangerouslySetInnerHTML`).
 
@@ -542,7 +560,7 @@ const A = <A dangerouslySetInnerHTML={{ __html: 'bad' }} />;
 
 ## JSX Styles
 
-### Implicit boolean attribute
+### Implicit Boolean Attribute
 
 Boolean attributes should be implicit when the boolean evaluates to `true`.
 
@@ -556,7 +574,7 @@ Bad:
 const A = <A x={true} />;
 ```
 
-### Attribute quotes
+### Attribute Quotes
 
 Attributes should use single quotes.
 
@@ -570,7 +588,7 @@ Bad:
 const A = <A x="bad" />;
 ```
 
-### Attribute curly bracket spacing
+### Attribute Curly Bracket Spacing
 
 Attributes should have no space between curly brackets and inner expression.
 
@@ -584,7 +602,7 @@ Bad:
 const A = <A x={ x } />;
 ```
 
-### Essential attribute curly brackets
+### Attribute Curly Brackets Presence
 
 Attribute curly brackets should be **omitted** unless they are required for logic or to improve readabilty.
 
@@ -600,7 +618,7 @@ const A = <A x={'bad'} />;
 const B = <B>{'also bad'}</B>;
 ```
 
-### Attribute indentation
+### Attribute Indentation
 
 When there are 2+ attributes, they should be separated onto newlines with consistent indentation.
 
@@ -619,7 +637,7 @@ const B = <B x={x}
 y={y} />;
 ```
 
-### Unique attributes
+### Unique Attributes
 
 There should be no duplicate attributes.
 
@@ -638,7 +656,7 @@ const A = <A
 />;
 ```
 
-### Unique key attribute
+### Unique Key Attribute
 
 Iterable components (e.g., array) should have a unique `key` attribute.
 
@@ -654,7 +672,7 @@ const A = [<A />, <A />];
 const B = [1, 2].map(a => <A />);
 ```
 
-### Extra closing tag
+### Extra Closing Tag
 
 Components with empty content should be self-closing.
 
@@ -668,7 +686,7 @@ Bad:
 const A = <A></A>;
 ```
 
-### Ordered lifecycle methods
+### Ordered Lifecycle Methods
 
 Lifecycle methods should be in the following order:
 1. `propTypes`
