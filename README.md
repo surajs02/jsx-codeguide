@@ -1,7 +1,11 @@
 # JSX Codeguide
 
-Guidelines to promote JSX code maintainability.
+Guidelines that promote JSX code maintainability via:
+- Code qualities: Improve code maintainability (promoted by all code rules)
+- Code logic rules: Reduce chances of unexpected code behaviour
+- Code style rules: Improve code consistency and readability
 
+Contents:
 - [JSX Codeguide](#jsx-codeguide)
     - [Qualities](#qualities)
     - [JS Logic](#js-logic)
@@ -43,9 +47,7 @@ Guidelines to promote JSX code maintainability.
         - [Extra Closing Tag](#extra-closing-tag)
         - [Ordered Lifecycle Methods](#ordered-lifecycle-methods)
 
-## Qualities
-
-Code qualities make code **easier to maintain**.
+## Code Qualities
 
 Answering **yes** to **any** of the following anti-quality questions indicates the respective quality is not met hence may need a **rethink**.
 
@@ -64,8 +66,7 @@ Answering **yes** to **any** of the following anti-quality questions indicates t
 
 ## JS Logic
 
-### Prefer Constants
-
+### Immutable Variables
 Variables should be `const` unless logic requires mutation.
 
 Good:
@@ -313,7 +314,7 @@ Bad:
 const a = 1
 ```
 
-### Extra Parentheses
+### Parentheses Presence
 
 Parentheses should be **omitted** unless they are required for logic or to improve readabilty.
 
@@ -698,7 +699,7 @@ const A = [<A />, <A />];
 const B = [1, 2].map(a => <A />);
 ```
 
-### Extra Closing Tag
+### Closing Tag Presence
 
 Components with empty content should be self-closing.
 
