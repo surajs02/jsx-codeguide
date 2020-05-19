@@ -5,23 +5,23 @@ Guidelines that promote JSX code maintainability via:
 - Code logic rules: Reduce chances of unexpected code behaviour
 - Code style rules: Improve code consistency and readability
 
-Contents:
 - [JSX Codeguide](#jsx-codeguide)
-    - [Qualities](#qualities)
-    - [JS Logic](#js-logic)
-        - [Prefer Constants](#prefer-constants)
+    - [Code Qualities](#code-qualities)
+    - [JS Logic Rules](#js-logic-rules)
+        - [Immutable Variables](#immutable-variables)
         - [Implicit Boolean Conditionals](#implicit-boolean-conditionals)
         - [Simple Conditionals](#simple-conditionals)
         - [Simple Control Paths](#simple-control-paths)
         - [Unused Code](#unused-code)
     - [JS Styles](#js-styles)
+        - [Comments](#comments)
         - [Unary Operator Spacing](#unary-operator-spacing)
         - [Binary Operator Spacing](#binary-operator-spacing)
         - [Operator Linebreaks](#operator-linebreaks)
         - [Trailing Commas](#trailing-commas)
         - [Comma Spacing](#comma-spacing)
         - [Semicolon Presence](#semicolon-presence)
-        - [Extra Parentheses](#extra-parentheses)
+        - [Parentheses Presence](#parentheses-presence)
         - [Curly Bracket Style](#curly-bracket-style)
         - [Curly Bracket Presence](#curly-bracket-presence)
         - [Object Curly Bracket Spacing](#object-curly-bracket-spacing)
@@ -44,7 +44,7 @@ Contents:
         - [Attribute Indentation](#attribute-indentation)
         - [Unique Attributes](#unique-attributes)
         - [Unique Key Attribute](#unique-key-attribute)
-        - [Extra Closing Tag](#extra-closing-tag)
+        - [Closing Tag Presence](#closing-tag-presence)
         - [Ordered Lifecycle Methods](#ordered-lifecycle-methods)
 
 ## Code Qualities
@@ -64,7 +64,7 @@ Answering **yes** to **any** of the following anti-quality questions indicates t
 |9|**Essential**|Is the code unused?|
 |10|**Pure**|Are there obsolete mutations?|
 
-## JS Logic
+## JS Logic Rules
 
 ### Immutable Variables
 Variables should be `const` unless logic requires mutation.
