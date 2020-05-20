@@ -68,7 +68,7 @@ Answering **yes** to **any** of the following anti-quality questions indicates t
 |9|**Essential**|Is the code unused?|
 |10|**Pure**|Are there obsolete mutations?|
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ## JS Logic Rules
 
@@ -99,7 +99,7 @@ let b = 2; // Obsolete since its immutable.
 console.log(b);
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Implicit Boolean Conditionals
 
@@ -126,7 +126,7 @@ const i = 0;
 if (n || u || !i) console.log('bad');
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Simple Conditionals
 
@@ -147,7 +147,7 @@ const b = a > 0 ? true : false;
 const c = a > 0 !== false; // Never use inverted complex booleans like `x !== false`.
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Simple Control Paths
 
@@ -167,7 +167,7 @@ if (a) return n;
 else return m;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Unused Code
 
@@ -185,9 +185,58 @@ console.log('Unused code');
 console.log('Unused code that may be required later');
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ## JS Styles
+
+### Naming
+
+All names should be concise and descriptive where possible, and abide the following rules:
+- Casing:
+    - File names should be camelCase unless representing a class
+    - Variable, function, and instance names should be camelCase
+    - Class names should be PascalCase
+- Semantics:
+    - Variable and class names should be nouns relevant to their value
+    - Boolean variable names should indicate a toggleable state
+    - Acronyms should remain camelCased
+    - Function names should be prepended with a verb indicating their action
+    - Async functions names should be prepended with `when`
+
+Good:
+```js
+// In file `loadCodeRules.js`. // File name describes its purpose.
+
+const isCodeRulesLoaded = false; // Name indicates the toggleable state.
+const codeRulesTitle = 'Code Rules'; // Noun name relevant to variable's value.
+
+const getCodeRulesTitle = () => { /* ... */ }; // Verb name indicates function's action.
+
+const httpHeaders = [/* ... */]; // Acronym maintains camelCase.
+httpHeaders.forEach(h => console.log(h)); // Short variable names are fine for local variables in short functions.
+
+// Prepending `when` indicates async functions.
+const whenFetchedCodeRules = () => { /* Returns promise. */ };
+const whenFetchedCodeRulesCount = async () => { /* Returns promise via `await`. */ };
+```
+
+Bad:
+```js
+// In file `loadRules.js`. // Doesn't describe the file's purpose.
+const loaded = false; // Doesn't describe what the state affects.
+const t = 'Code Rules'; // Doesn't describe what the value represents.
+
+const codeRulesTitle = () => { /* ... */ }; // Doesn't indicate the function's action.
+
+const HTTPHeaders = [/* ... */]; // Inconsistent and breaks variable camelCasing.
+httpHeaders.forEach(h => console.log(h)); // Short variable names are fine for local variables in short functions.
+
+// These names don't indicate the functions are async.
+const getCodeRules = () => { /* Returns promise. */ };
+const getCodeRulesCount = async () => { /* Returns promise via `await`. */ };
+```
+
+[Go to top](#table-of-contents)
 
 ### Comments
 
@@ -215,7 +264,7 @@ if (true)
 return true;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Unary Operator Spacing
 
@@ -233,7 +282,7 @@ const a = typeof{};
 const b =++[].length;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Binary Operator Spacing
 
@@ -251,7 +300,7 @@ const a = 1+2;
 const b = 3+++4;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Operator Linebreaks
 
@@ -278,7 +327,7 @@ const c = a === 1 ? 1
     : 2;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Trailing Commas
 
@@ -308,7 +357,7 @@ const a2 = [
 ];
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Comma Spacing
 
@@ -326,7 +375,7 @@ const a = 1 ,b = 2;
 const c = { n: 1 , m: 2 };
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Semicolon Presence
 
@@ -342,7 +391,7 @@ Bad:
 const a = 1
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Parentheses Presence
 
@@ -358,7 +407,7 @@ Bad:
 const a = b + c;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Indentation
 
@@ -385,7 +434,7 @@ if (true) {
 }
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Curly Bracket Style
 
@@ -437,7 +486,7 @@ else {
 }
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Object Curly Bracket Spacing
 
@@ -453,7 +502,7 @@ Bad:
 const a = {n: 1};
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Object Colon Spacing
 
@@ -470,7 +519,7 @@ const a = { n:1 };
 const b = { n :1 };
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Quote Presence
 
@@ -488,7 +537,7 @@ const a = "bad";
 const b = `bad`;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Arrow Parentheses Presence
 
@@ -507,7 +556,7 @@ Bad:
 const a = (x) => {};
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Arrow Body Brackets Presence
 
@@ -529,7 +578,7 @@ const a = () => {
 };
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Arrow Spacing
 
@@ -547,7 +596,7 @@ const a = () =>console.log('bad');
 const a = ()=>console.log('bad');
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ## JSX Logic
 
@@ -578,7 +627,7 @@ const A = createReactClass({
 });
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Default Types
 
@@ -607,7 +656,7 @@ const A = createReactClass({
 });
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Recursive Updates
 
@@ -633,7 +682,7 @@ const A = createReactClass({
 });
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Indirect State Mutation
 
@@ -649,7 +698,7 @@ Bad:
 this.state.x = 'bad';
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Safe Attributes
 
@@ -665,7 +714,7 @@ Bad:
 const A = <A dangerouslySetInnerHTML={{ __html: 'bad' }} />;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ## JSX Styles
 
@@ -683,7 +732,7 @@ Bad:
 const A = <A x={true} />;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Attribute Quotes
 
@@ -699,7 +748,7 @@ Bad:
 const A = <A x="bad" />;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Attribute Curly Bracket Spacing
 
@@ -715,7 +764,7 @@ Bad:
 const A = <A x={ x } />;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Attribute Curly Brackets Presence
 
@@ -733,7 +782,7 @@ const A = <A x={'bad'} />;
 const B = <B>{'bad'}</B>;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Attribute Indentation
 
@@ -754,7 +803,7 @@ const B = <B x={x}
 y={y} />;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Unique Attributes
 
@@ -773,7 +822,7 @@ const A = <A
 />;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Unique Key Attribute
 
@@ -791,7 +840,7 @@ const A = [<A />, <A />];
 const B = [1, 2].map(a => <A />);
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Closing Tag Presence
 
@@ -807,7 +856,7 @@ Bad:
 const A = <A></A>;
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
 
 ### Ordered Lifecycle Methods
 
@@ -846,4 +895,4 @@ const A = createReactClass({
 });
 ```
 
-[Go to top](#-table-of-contents)
+[Go to top](#table-of-contents)
