@@ -1,8 +1,8 @@
 # JSX Codeguide
 
-Guidelines that promote JSX code maintainability via:
+Opinionated guidelines that promote JSX code maintainability via:
 - Code qualities: Improve code maintainability (promoted by all code rules)
-- Code logic rules: Reduce chances of unexpected code behaviour
+- Code logic rules: Reduce unexpected code behaviours
 - Code style rules: Improve code consistency and readability
 
 - [JSX Codeguide](#jsx-codeguide)
@@ -104,8 +104,8 @@ const u = undefined;
 const i = 0;
 let b = true;
 
-if (n == null || u == null || i === 0 || b) console.log('Good');
-if (b === true) console.log('Also good'); // Explicit boolean checks are fine to avoid ambiguouity.
+if (n == null || u == null || i === 0 || b) console.log('good');
+if (b === true) console.log('good'); // Explicit boolean checks are fine to avoid ambiguouity.
 ```
 
 Bad:
@@ -115,9 +115,10 @@ const n = null;
 const u = undefined;
 const i = 0;
 
-if (n || u || !i) console.log('Bad');
+if (n || u || !i) console.log('bad');
 ```
 
+[Go to top](#-table-of-contents)
 ### Simple Conditionals
 
 Conditionals should be simple, explicit, and readable hence should not include complexities (e.g., expanding a boolean expression into a ternary).
@@ -360,10 +361,10 @@ Curly brackets should only be used when required for logic or readability. E.g.,
 Good:
 ```js
 if (a) console.log('good');
-else console.log('also good');
+else console.log('good');
 
 if (b) {
-    console.log('test');
+    // ...
     console.log('good');
 }
 ```
@@ -374,7 +375,7 @@ if (a) {
     console.log('bad');
 }
 else {
-    console.log('also bad');
+    console.log('bad');
 }
 ```
 
@@ -448,8 +449,8 @@ Good:
 ```js
 const a = () => console.log('good');
 const b = () => {
+    // ...
     console.log('good');
-    console.log('also good');
 };
 ```
 
@@ -512,23 +513,23 @@ Components should specify `getDefaultProps` if required by logic.
 Good:
 ```jsx
 const A = createReactClass({
+    // ...
     getDefaultProps() {
         x: 'good',
     },
     render () {
         return this.props.x.length;
     },
-    // ...
 });
 ```
 
 Bad:
 ```jsx
 const A = createReactClass({
+    // ...
     render () {
         return this.props.x.length;
     },
-    // ...
 });
 ```
 
@@ -539,20 +540,20 @@ Components should avoid recursive or frequent updates (e.g., uncontrolled `setSt
 Good:
 ```jsx
 const A = createReactClass({
+    // ...
     componentDidUpdate(prevProps, prevState) {
         if (prevProps !== this.props && prevState !== this.state) this.setState({ x: ++x });
     },
-    // ...
 });
 ```
 
 Bad:
 ```jsx
 const A = createReactClass({
+    // ...
     componentDidUpdate() {
         this.setState({ x: 'bad' });
     },
-    // ...
 });
 ```
 
@@ -642,7 +643,7 @@ const B = <B>good</B>;
 Bad:
 ```jsx
 const A = <A x={'bad'} />;
-const B = <B>{'also bad'}</B>;
+const B = <B>{'bad'}</B>;
 ```
 
 ### Attribute Indentation
@@ -670,9 +671,7 @@ There should be no duplicate attributes.
 
 Good:
 ```jsx
-const A = <A 
-    x={x}
-/>;
+const A = <A x={x} />;
 ```
 
 Bad:
@@ -727,25 +726,25 @@ Lifecycle methods should be in the following order:
 Good:
 ```jsx
 const A = createReactClass({
+    // ...
     getInitialState() {
         // ...
     },
     render() {
         // ...
     },
-    // ...
 });
 ```
 
 Bad:
 ```jsx
 const A = createReactClass({
+    // ...
     getInitialState() {
         // ...
     },
     render() {
         // ...
     },
-    // ...
 });
 ```
