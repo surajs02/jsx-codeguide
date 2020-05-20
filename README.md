@@ -329,6 +329,31 @@ Bad:
 const a = b + c;
 ```
 
+### Indentation
+
+Indented code should have 4 spaces.
+
+Good:
+```js
+if (true) {
+    // ...
+    console.log('good')
+}
+```
+
+Bad:
+```js
+if (true) { 
+// ...
+console.log('bad'); // No spaces.
+}
+
+if (true) {
+  // ...
+  console.log('bad'); // 2 spaces.
+}
+```
+
 ### Curly Bracket Style
 
 Control statements with curly brackets should follow K&R-1TBS indentation (i.e., space separated opening brackets on the same line as control statement where curly brackets can be omitted if not required by logic).
