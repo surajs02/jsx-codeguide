@@ -5,7 +5,10 @@ Opinionated guidelines that promote JSX code maintainability via:
 - Code logic rules: Reduce unexpected code behaviours
 - Code style rules: Improve code consistency and readability
 
+## Table of Contents:
+
 - [JSX Codeguide](#jsx-codeguide)
+    - [Table of Contents:](#table-of-contents)
     - [Code Qualities](#code-qualities)
     - [JS Logic Rules](#js-logic-rules)
         - [Immutable Variables](#immutable-variables)
@@ -22,14 +25,15 @@ Opinionated guidelines that promote JSX code maintainability via:
         - [Comma Spacing](#comma-spacing)
         - [Semicolon Presence](#semicolon-presence)
         - [Parentheses Presence](#parentheses-presence)
+        - [Indentation](#indentation)
         - [Curly Bracket Style](#curly-bracket-style)
         - [Curly Bracket Presence](#curly-bracket-presence)
         - [Object Curly Bracket Spacing](#object-curly-bracket-spacing)
         - [Object Colon Spacing](#object-colon-spacing)
         - [Quote Presence](#quote-presence)
-        - [Arrow Function Parentheses](#arrow-function-parentheses)
-        - [Arrow Function Body](#arrow-function-body)
-        - [Arrow Function Arrow Spacing](#arrow-function-arrow-spacing)
+        - [Arrow Parentheses Presence](#arrow-parentheses-presence)
+        - [Arrow Body Brackets Presence](#arrow-body-brackets-presence)
+        - [Arrow Spacing](#arrow-spacing)
     - [JSX Logic](#jsx-logic)
         - [Attribute Types](#attribute-types)
         - [Default Types](#default-types)
@@ -64,6 +68,8 @@ Answering **yes** to **any** of the following anti-quality questions indicates t
 |9|**Essential**|Is the code unused?|
 |10|**Pure**|Are there obsolete mutations?|
 
+[Go to top](#-table-of-contents)
+
 ## JS Logic Rules
 
 ### Immutable Variables
@@ -93,6 +99,8 @@ let b = 2; // Obsolete since its immutable.
 console.log(b);
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Implicit Boolean Conditionals
 
 Implicit use of truthy/falsy conditionals should only be applied to boolean types. Other types **must** use explicit conditionals.
@@ -119,6 +127,7 @@ if (n || u || !i) console.log('bad');
 ```
 
 [Go to top](#-table-of-contents)
+
 ### Simple Conditionals
 
 Conditionals should be simple, explicit, and readable hence should not include complexities (e.g., expanding a boolean expression into a ternary).
@@ -138,6 +147,8 @@ const b = a > 0 ? true : false;
 const c = a > 0 !== false; // Never use inverted complex booleans like `x !== false`.
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Simple Control Paths
 
 Conditional paths should be simple hence should not have complexities (e.g., `return` in `else` when `if` contains `return`).
@@ -156,6 +167,8 @@ if (a) return n;
 else return m;
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Unused Code
 
 Unused code should be removed. If the code may be required at a later date, it should be commentted with an explaination.
@@ -171,6 +184,8 @@ Bad:
 console.log('Unused code');
 console.log('Unused code that may be required later');
 ```
+
+[Go to top](#-table-of-contents)
 
 ## JS Styles
 
@@ -200,6 +215,8 @@ if (true)
 return true;
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Unary Operator Spacing
 
 Word unary operators (e.g., `typeof`) should have a space either side of the operator whilst nonword unary operators (e.g., `++`) should be prepended with a space.
@@ -216,6 +233,8 @@ const a = typeof{};
 const b =++[].length;
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Binary Operator Spacing
 
 Binary operators should have a space either side of the operator.
@@ -231,6 +250,8 @@ Bad:
 const a = 1+2;
 const b = 3+++4;
 ```
+
+[Go to top](#-table-of-contents)
 
 ### Operator Linebreaks
 
@@ -256,6 +277,8 @@ const b = a === 1 ||
 const c = a === 1 ? 1
     : 2;
 ```
+
+[Go to top](#-table-of-contents)
 
 ### Trailing Commas
 
@@ -285,6 +308,8 @@ const a2 = [
 ];
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Comma Spacing
 
 Non-trailing commas should be followed by a space.
@@ -301,6 +326,8 @@ const a = 1 ,b = 2;
 const c = { n: 1 , m: 2 };
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Semicolon Presence
 
 **All** statements should end with a semicolon.
@@ -315,6 +342,8 @@ Bad:
 const a = 1
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Parentheses Presence
 
 Parentheses should be **omitted** unless they are required for logic or to improve readabilty.
@@ -328,6 +357,8 @@ Bad:
 ```js
 const a = b + c;
 ```
+
+[Go to top](#-table-of-contents)
 
 ### Indentation
 
@@ -353,6 +384,8 @@ if (true) {
   console.log('bad'); // 2 spaces.
 }
 ```
+
+[Go to top](#-table-of-contents)
 
 ### Curly Bracket Style
 
@@ -404,6 +437,8 @@ else {
 }
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Object Curly Bracket Spacing
 
 Object curly brackets should have a space between inside content and the brackets.
@@ -417,6 +452,8 @@ Bad:
 ```js
 const a = {n: 1};
 ```
+
+[Go to top](#-table-of-contents)
 
 ### Object Colon Spacing
 
@@ -432,6 +469,8 @@ Bad:
 const a = { n:1 };
 const b = { n :1 };
 ```
+
+[Go to top](#-table-of-contents)
 
 ### Quote Presence
 
@@ -449,7 +488,9 @@ const a = "bad";
 const b = `bad`;
 ```
 
-### Arrow Function Parentheses
+[Go to top](#-table-of-contents)
+
+### Arrow Parentheses Presence
 
 Arrow function parentheses should be omitted unless required for logic (e.g., 2+ parameters).
 
@@ -466,7 +507,9 @@ Bad:
 const a = (x) => {};
 ```
 
-### Arrow Function Body
+[Go to top](#-table-of-contents)
+
+### Arrow Body Brackets Presence
 
 Curly brackets should be omitted in arrow function bodies unless required for logic.
 
@@ -486,7 +529,9 @@ const a = () => {
 };
 ```
 
-### Arrow Function Arrow Spacing
+[Go to top](#-table-of-contents)
+
+### Arrow Spacing
 
 An arrow function arrow should have space either side.
 
@@ -501,6 +546,8 @@ const a = ()=> console.log('bad');
 const a = () =>console.log('bad');
 const a = ()=>console.log('bad');
 ```
+
+[Go to top](#-table-of-contents)
 
 ## JSX Logic
 
@@ -531,6 +578,8 @@ const A = createReactClass({
 });
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Default Types
 
 Components should specify `getDefaultProps` if required by logic.
@@ -558,6 +607,8 @@ const A = createReactClass({
 });
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Recursive Updates
 
 Components should avoid recursive or frequent updates (e.g., uncontrolled `setState` in `componentDidUpdate`).
@@ -582,6 +633,8 @@ const A = createReactClass({
 });
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Indirect State Mutation
 
 Components should not directly mutate state.
@@ -595,6 +648,8 @@ Bad:
 ```jsx
 this.state.x = 'bad';
 ```
+
+[Go to top](#-table-of-contents)
 
 ### Safe Attributes
 
@@ -610,6 +665,7 @@ Bad:
 const A = <A dangerouslySetInnerHTML={{ __html: 'bad' }} />;
 ```
 
+[Go to top](#-table-of-contents)
 
 ## JSX Styles
 
@@ -627,6 +683,8 @@ Bad:
 const A = <A x={true} />;
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Attribute Quotes
 
 Attributes should use single quotes.
@@ -641,6 +699,8 @@ Bad:
 const A = <A x="bad" />;
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Attribute Curly Bracket Spacing
 
 Attributes should have no space between curly brackets and inner expression.
@@ -654,6 +714,8 @@ Bad:
 ```jsx
 const A = <A x={ x } />;
 ```
+
+[Go to top](#-table-of-contents)
 
 ### Attribute Curly Brackets Presence
 
@@ -670,6 +732,8 @@ Bad:
 const A = <A x={'bad'} />;
 const B = <B>{'bad'}</B>;
 ```
+
+[Go to top](#-table-of-contents)
 
 ### Attribute Indentation
 
@@ -690,6 +754,8 @@ const B = <B x={x}
 y={y} />;
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Unique Attributes
 
 There should be no duplicate attributes.
@@ -707,6 +773,8 @@ const A = <A
 />;
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Unique Key Attribute
 
 Iterable components (e.g., array) should have a unique `key` attribute.
@@ -723,6 +791,8 @@ const A = [<A />, <A />];
 const B = [1, 2].map(a => <A />);
 ```
 
+[Go to top](#-table-of-contents)
+
 ### Closing Tag Presence
 
 Components with empty content should be self-closing.
@@ -736,6 +806,8 @@ Bad:
 ```jsx
 const A = <A></A>;
 ```
+
+[Go to top](#-table-of-contents)
 
 ### Ordered Lifecycle Methods
 
@@ -773,3 +845,5 @@ const A = createReactClass({
     },
 });
 ```
+
+[Go to top](#-table-of-contents)
