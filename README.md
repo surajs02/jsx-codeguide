@@ -101,6 +101,53 @@ console.log(b);
 
 [Go to top](#table-of-contents)
 
+### Predictable Initial Values
+
+**All** uninitialized variables should have predicatable initial values based on their type (e.g., all reference types start as `null`).
+
+The `undefined` and `null` values represent unset variables and are treated as the same value (i.e., nullish) hence can be caught via nullish conditionals (e.g., `x == null`).
+
+Primitive type initial values:
+|Type|Initial Value|
+|---|---|
+|`boolean`|false|
+|`number`|0|
+
+Reference type initial values:
+|Type|Initial Value|
+|---|---|
+|`string`|nullish|
+|`object`|nullish|
+|Array|nullish or `[]`|
+|Function|nullish|
+
+Good:
+```js
+// Primitive types start with their own respective values.
+const isLoggedIn = false; // Booleans start as `false`.
+const totalUsers = 0; // Numbers start as `0`.
+
+// Reference types start as nullish.
+let userName; // Strings start as nullish.
+let user; // Objects start as nullish.
+let newUsers; // Arrays start as nullish.
+let allUsers; // Arrays can start as `[]` if required.
+```
+
+Bad:
+
+```js
+// Primitives shouldn't be nullish.
+const isLoggedIn; // Boolean.
+const totalUsers; // Number.
+
+// Non-nullish references cannot be caught by nullish conditionals.
+let userName = ''; 
+let user = {};
+```
+
+[Go to top](#table-of-contents)
+
 ### Implicit Boolean Conditionals
 
 Implicit use of truthy/falsy conditionals should only be applied to boolean types. Other types **must** use explicit conditionals.
