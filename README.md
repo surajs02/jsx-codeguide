@@ -101,9 +101,6 @@ Bad:
 ```js
 let a = 1; // Obsolete since its immutable.
 console.log(a);
-
-let b = 2; // Obsolete since its immutable.
-console.log(b);
 ```
 
 [Go to top](#table-of-contents)
@@ -232,10 +229,10 @@ Good:
 const whenGotError = () => Promise.reject();
 const handleError = e => console.error(e);
 
-// With `Promise`.
+// With promise.
 whenGotError.catch(handleError); // Handled error.
 
-// With `async/await`.
+// With async/await.
 (async () => { // Closure for brevity.
     try {
         // Other complex async ... (otherwise this async/await would be obsolete).
@@ -251,7 +248,7 @@ Bad:
 ```js
 const whenGotError = () => Promise.reject();
 
-whenAction1(); // Unhandled promise error.
+whenGotError(); // Unhandled promise error.
 
 (async () => await whenGotError())(); // Unhandled async/await error.
 ```
@@ -264,16 +261,15 @@ Prefer `Promise`'s for simple async operations and optionally use `async/await` 
 
 Good:
 ```js
+const handleError = e => console.error(e);
 // Independent async actions.
 const whenFetchedCodeRules = () => Promise.resolve('...');
 const whenFetchedCodeStyles = () => Promise.resolve('...');
-// Dependent async actions.
+// Dependent async action.
 const whenLogged = data => new Promise(res => {
     console.log(res);
     res();
 });
-
-const handleError = e => console.error(e);
 
 Promise.all([whenFetchedCodeRules, whenFetchedCodeStyles]) // Unblocked independent async actions.
     // No promise nesting.
@@ -283,16 +279,15 @@ Promise.all([whenFetchedCodeRules, whenFetchedCodeStyles]) // Unblocked independ
 
 Bad:
 ```js
+const handleError = e => console.error(e);
 // Independent async actions.
 const whenFetchedCodeRules = () => Promise.resolve('...');
 const whenFetchedCodeStyles = () => Promise.resolve('...');
-// Dependent async actions.
+// Dependent async action.
 const whenLogged = data => new Promise(res => {
     console.log(res);
     res();
 });
-
-const handleError = e => console.error(e);
 
 // With promises.
 whenFetchedCodeRules()
@@ -544,7 +539,7 @@ const a = 1
 
 ### Parentheses Presence
 
-Parentheses should be **omitted** unless they are required for logic or to improve readabilty.
+Parentheses should be **omitted** unless required for logic or to improve readabilty.
 
 Good:
 ```js
@@ -655,7 +650,7 @@ const a = {n: 1};
 
 ### Object Colon Spacing
 
-Object colons should be prepended with a space.
+Object colons should be appended with a space.
 
 Good:
 ```js
@@ -741,8 +736,8 @@ const a = () => console.log('good');
 Bad:
 ```js
 const a = ()=> console.log('bad');
-const a = () =>console.log('bad');
-const a = ()=>console.log('bad');
+const b = () =>console.log('bad');
+const c = ()=>console.log('bad');
 ```
 
 [Go to top](#table-of-contents)
@@ -771,7 +766,7 @@ const a = () => {
 
 ### Simple Null Coalescing
 
-Prefer functions (if available) when null coalescing several parameters.
+Prefer available functions when null coalescing several parameters.
 
 Good:
 ```js
@@ -787,7 +782,7 @@ Bad:
 const coalesce = (...a) => a.find(v => != null); // Existing coalesce function.
 const user;
 
-// Operator is bad for multiple parameters
+// Operator is bad for multiple parameters.
 const userName = user.userName ?? user.name ?? 'Unknown';
 ```
 
@@ -811,7 +806,7 @@ if (data?.user?.name != null) setName(data.user.name);
 // Simpler and no optional chaining overuse.
 const hasStats = user => user?.details?.stats == null
     ? false
-    : Object.entries(user.stats).every(s => s > 0)
+    : Object.entries(user.stats).every(([v]) => v > 0)
 ```
 
 Bad:
@@ -836,23 +831,23 @@ Components should specify `propTypes`.
 Good:
 ```jsx
 const A = createReactClass({
+    // ...
     propTypes = {
         x: 'good',
     },
     render () {
         return this.props.x;
     },
-    // ...
 });
 ```
 
 Bad:
 ```jsx
 const A = createReactClass({
+    // ...
     render () {
         return this.props.x;
     },
-    // ...
 });
 ```
 
