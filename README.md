@@ -12,11 +12,15 @@ Opinionated guidelines that promote JSX code maintainability via:
     - [Code Qualities](#code-qualities)
     - [JS Logic Rules](#js-logic-rules)
         - [Immutable Variables](#immutable-variables)
+        - [Predictable Initial Values](#predictable-initial-values)
         - [Implicit Boolean Conditionals](#implicit-boolean-conditionals)
         - [Simple Conditionals](#simple-conditionals)
         - [Simple Control Paths](#simple-control-paths)
+        - [Graceful Async](#graceful-async)
+        - [Simple Async](#simple-async)
         - [Unused Code](#unused-code)
     - [JS Styles](#js-styles)
+        - [Naming](#naming)
         - [Comments](#comments)
         - [Unary Operator Spacing](#unary-operator-spacing)
         - [Binary Operator Spacing](#binary-operator-spacing)
@@ -251,7 +255,55 @@ whenAction1(); // Unhandled promise error.
 
 [Go to top](#table-of-contents)
 
+### Simple Async
+
+Prefer `Promise`'s for simple async operations and optionally use `async/await` for complex async operations.
+
+Good:
+```js
+// Independent async actions.
+const whenFetchedCodeRules = () => Promise.resolve('...');
+const whenFetchedCodeStyles = () => Promise.resolve('...');
+// Dependent async actions.
+const whenLogged = data => new Promise(res => {
+    console.log(res);
+    res();
+});
+
+const handleError = e => console.error(e);
+
+Promise.all([whenFetchedCodeRules, whenFetchedCodeStyles]) // Unblocked independent async actions.
+    // No promise nesting.
+    .then(whenLogged)
+    .catch(handleError);
+```
+
+Bad:
+```js
+// With promises.
+whenFetchedCodeRules()
+    .then(rules => {
+        whenFetchedCodeStyles().then(styles => { // Blocked independent async action.
+            whenLogged(rules).then(() => whenLogged(styles)) // Nested promises.
+        })
+    })
+    .catch(handleError);
+
+// With async/await.
+(async () => { // Obsolete async/await since handling simple async actions.
+    try {
+        const rules = await whenFetchedCodeRules();
+        const styles = await whenFetchedCodeRules(); // Blocked independent async action.
+        await whenLogged(rules);
+        await whenLogged(styles);
+    } catch (e) {
+        handleError(e);
+    }
+})();
+```
+
 [Go to top](#table-of-contents)
+
 ### Unused Code
 
 Unused code should be removed. If the code may be required at a later date, it should be commentted with an explaination.
