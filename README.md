@@ -216,6 +216,42 @@ else return m;
 
 [Go to top](#table-of-contents)
 
+### Graceful Async
+
+Async operations should include handle expected errors.
+
+Good:
+```js
+const whenGotError = () => Promise.reject();
+const handleError = e => console.error(e);
+
+// With `Promise`.
+whenGotError.catch(handleError); // Handled error.
+
+// With `async/await`.
+(async () => { // Closure for brevity.
+    try {
+        // Other complex async ... (otherwise this async/await would be obsolete).
+
+        return await whenGotError();
+    } catch (e) {
+        handleError(e); // Handled error.
+    }
+})();
+```
+
+Bad:
+```js
+const whenGotError = () => Promise.reject();
+
+whenAction1(); // Unhandled promise error.
+
+(async () => await whenGotError())(); // Unhandled async/await error.
+```
+
+[Go to top](#table-of-contents)
+
+[Go to top](#table-of-contents)
 ### Unused Code
 
 Unused code should be removed. If the code may be required at a later date, it should be commentted with an explaination.
