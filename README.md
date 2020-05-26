@@ -40,6 +40,7 @@ Opinionated guidelines that promote JSX code maintainability via:
         - [Arrow Spacing](#arrow-spacing)
         - [Arrow Body Brackets Presence](#arrow-body-brackets-presence-1)
         - [Simple Null Coalescing](#simple-null-coalescing)
+        - [Simple Optional Chaining](#simple-optional-chaining)
     - [JSX Logic](#jsx-logic)
         - [Attribute Types](#attribute-types)
         - [Default Types](#default-types)
@@ -788,6 +789,40 @@ const user;
 
 // Operator is bad for multiple parameters
 const userName = user.userName ?? user.name ?? 'Unknown';
+```
+
+[Go to top](#table-of-contents)
+
+### Simple Optional Chaining
+
+Optional chaining can be used in place of complex null conditionals but should:
+- remain readable
+- remain explicit for non-boolean values
+- not be overused
+
+Good:
+```js
+// Complex conditionals are fine but can be simpler via optional chaining.
+if (data != null && data.user != null && data.user.name) setName(data.user.name);
+
+// Simpler and uses explicit check for non-boolean value.
+if (data?.user?.name != null) setName(data.user.name);
+
+// Simpler and no optional chaining overuse.
+const hasStats = user => user?.details?.stats == null
+    ? false
+    : Object.entries(user.stats).every(s => s > 0)
+```
+
+Bad:
+```js
+// Shouldn't use implicit checks on non-boolean values.
+if (data?.user?.name) setName(data.user.name);
+
+// Overuse of optional chaining.
+const hasStats = user => (user?.details?.stats?.health
+    + user?.details?.stats.attack
+    + user?.details?.stats.defence) > 0;
 ```
 
 [Go to top](#table-of-contents)
