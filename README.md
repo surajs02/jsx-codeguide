@@ -222,6 +222,32 @@ else return m;
 
 [Go to top](#table-of-contents)
 
+### Avoid Loop Labels
+
+Loop labels (e.g., `break`) are iterative `GOTO`s hence should be avoided.
+
+Good:
+```js
+const findFirstEven = nums => nums.find(n => n % 2 === 0); // No loop labels.
+```
+
+Bad:
+
+```js
+const findFirstEven = nums => {
+    let firstEven = nums[0];
+    for (const i = 0; i < nums.length; i++) {
+        if (nums[i] % 2 === 0) {
+            firstEven = nums[i];
+            break; // Loop label.
+        }
+    }
+    return firstEven;
+}
+```
+
+[Go to top](#table-of-contents)
+
 ### Graceful Async
 
 Async operations should handle expected errors.
