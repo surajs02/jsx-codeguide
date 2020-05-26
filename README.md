@@ -12,6 +12,7 @@ Suraj's opinionated guidelines that promote JSX code maintainability via:
     - [Code Qualities](#code-qualities)
     - [JS Logic Rules](#js-logic-rules)
         - [Immutable Variables](#immutable-variables)
+        - [Magic Numbers](#magic-numbers)
         - [Predictable Initial Values](#predictable-initial-values)
         - [Implicit Boolean Conditionals](#implicit-boolean-conditionals)
         - [Simple Conditionals](#simple-conditionals)
@@ -107,6 +108,33 @@ console.log(a);
 
 [Go to top](#table-of-contents)
 
+### Magic Numbers
+Magic numbers and other unclear yet often used values should be descriptive reusable constants.
+
+Good:
+```js
+// In constants.js.
+const CLICKS_TO_WIN = 200;
+const SUCCESS_COLOR = '#34A853';
+
+// In main.js.
+if (clickCount >= CLICKS_TO_WIN) { // Descriptive reusable constant number.
+    buttonColor = SUCCESS_COLOR; // Descriptive reusable constant string.
+    textColor = SUCCESS_COLOR;
+}
+
+```
+
+Bad:
+```js
+if (clickCount >= 123) { // Unclear purpose of a specific number.
+    buttonColor = '#34A853'; // Unclear purpose of color string.
+    textColor = '#34A853';
+}
+```
+
+[Go to top](#table-of-contents)
+
 ### Predictable Initial Values
 
 **All** uninitialized variables should have predicatable initial values based on their type (e.g., all reference types start as `null`).
@@ -143,7 +171,6 @@ let allUsers; // Arrays can start as `[]` if required.
 ```
 
 Bad:
-
 ```js
 // Primitives shouldn't be nullish.
 const isLoggedIn; // Boolean.
@@ -236,6 +263,7 @@ const buttonColor = isComplete // Pure immutable value.
             : 'grey'; // 3 is max for inline ternaries.
 ```
 
+Bad:
 ```js
 let buttonColor; // Impure obsolete variable and subsequent mutations.
 if (isComplete) buttonColor = 'green';
