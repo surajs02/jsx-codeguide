@@ -5,10 +5,10 @@ Opinionated guidelines that promote JSX code maintainability via:
 - Code logic rules: Reduce unexpected code behaviours
 - Code style rules: Improve code consistency and readability
 
-## Table of Contents:
+## Table of Contents
 
 - [JSX Codeguide](#jsx-codeguide)
-    - [Table of Contents:](#table-of-contents)
+    - [Table of Contents](#table-of-contents)
     - [Code Qualities](#code-qualities)
     - [JS Logic Rules](#js-logic-rules)
         - [Immutable Variables](#immutable-variables)
@@ -38,6 +38,8 @@ Opinionated guidelines that promote JSX code maintainability via:
         - [Arrow Parentheses Presence](#arrow-parentheses-presence)
         - [Arrow Body Brackets Presence](#arrow-body-brackets-presence)
         - [Arrow Spacing](#arrow-spacing)
+        - [Arrow Body Brackets Presence](#arrow-body-brackets-presence-1)
+        - [Simple Null Coalescing](#simple-null-coalescing)
     - [JSX Logic](#jsx-logic)
         - [Attribute Types](#attribute-types)
         - [Default Types](#default-types)
@@ -280,6 +282,17 @@ Promise.all([whenFetchedCodeRules, whenFetchedCodeStyles]) // Unblocked independ
 
 Bad:
 ```js
+// Independent async actions.
+const whenFetchedCodeRules = () => Promise.resolve('...');
+const whenFetchedCodeStyles = () => Promise.resolve('...');
+// Dependent async actions.
+const whenLogged = data => new Promise(res => {
+    console.log(res);
+    res();
+});
+
+const handleError = e => console.error(e);
+
 // With promises.
 whenFetchedCodeRules()
     .then(rules => {
@@ -729,6 +742,52 @@ Bad:
 const a = ()=> console.log('bad');
 const a = () =>console.log('bad');
 const a = ()=>console.log('bad');
+```
+
+[Go to top](#table-of-contents)
+
+### Arrow Body Brackets Presence
+
+Curly brackets should be omitted in arrow function bodies unless required for logic.
+
+Good:
+```js
+const a = () => console.log('good');
+const b = () => {
+    // ...
+    console.log('good');
+};
+```
+
+Bad:
+```js
+const a = () => {
+    console.log('bad');
+};
+```
+
+[Go to top](#table-of-contents)
+
+### Simple Null Coalescing
+
+Prefer functions (if available) when null coalescing several parameters.
+
+Good:
+```js
+const coalesce = (...a) => a.find(v => != null); // Existing coalesce function.
+const user;
+
+const userName = coalesce(user.userName, user.name, 'Unknown'); // Function is good for several parameters.
+const userName = user.userName ?? 'Unknown'; // Operator is fine for 1 parameter.
+```
+
+Bad:
+```js
+const coalesce = (...a) => a.find(v => != null); // Existing coalesce function.
+const user;
+
+// Operator is bad for multiple parameters
+const userName = user.userName ?? user.name ?? 'Unknown';
 ```
 
 [Go to top](#table-of-contents)
