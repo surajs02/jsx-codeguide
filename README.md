@@ -16,6 +16,7 @@ Suraj's opinionated guidelines that promote JSX code maintainability via:
         - [Implicit Boolean Conditionals](#implicit-boolean-conditionals)
         - [Simple Conditionals](#simple-conditionals)
         - [Simple Control Paths](#simple-control-paths)
+        - [Pure Control Paths](#pure-control-paths)
         - [Loop Labels](#loop-labels)
         - [Pure Iteration](#pure-iteration)
         - [Graceful Async](#graceful-async)
@@ -171,7 +172,6 @@ if (b === true) console.log('good'); // Explicit boolean checks are fine to avoi
 ```
 
 Bad:
-
 ```js
 const n = null;
 const u = undefined;
@@ -194,7 +194,6 @@ const c = a > 0; // `a > 0 === true` is also fine.
 ```
 
 Bad:
-
 ```js
 a = 1;
 const b = a > 0 ? true : false;
@@ -205,7 +204,7 @@ const c = a > 0 !== false; // Never use inverted complex booleans like `x !== fa
 
 ### Simple Control Paths
 
-Conditional paths should be simple hence should not have complexities (e.g., `return` in `else` when `if` contains `return`).
+Control paths should be simple hence should not have complexities (e.g., `return` in `else` when `if` contains `return`).
 
 Good:
 ```js
@@ -215,10 +214,34 @@ return m;
 ```
 
 Bad:
-
 ```js
 if (a) return n;
 else return m;
+```
+
+[Go to top](#table-of-contents)
+
+### Pure Control Paths
+
+Prefer expressions in control paths (e.g., using ternary instead of `if/else`);
+
+Good:
+```js
+const buttonColor = isComplete // Pure immutable value.
+    ? 'green'
+    : hasWarnings
+        ? 'orange'
+        : hasErrors
+            ? 'red'
+            : 'grey'; // 3 is max for inline ternaries.
+```
+
+```js
+let buttonColor; // Impure obsolete variable and subsequent mutations.
+if (isComplete) buttonColor = 'green';
+else if (hasWarnings) buttonColor = 'orange';
+else if (hasErrors) buttonColor = 'red';
+else buttonColor = 'grey';
 ```
 
 [Go to top](#table-of-contents)
@@ -233,7 +256,6 @@ const findFirstEven = nums => nums.find(n => n % 2 === 0); // No loop labels.
 ```
 
 Bad:
-
 ```js
 const findFirstEven = nums => {
     let firstEven = nums[0];
@@ -259,7 +281,6 @@ const doubleNums = nums => nums.map(n => n * 2); // Iterative function applying 
 ```
 
 Bad:
-
 ```js
 const doubleNums = nums => {
     let total = 0; // Obsolete variable.
