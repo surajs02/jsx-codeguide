@@ -80,7 +80,7 @@ Answering **yes** to **any** of the following anti-quality questions indicates t
 ## JS Logic Rules
 
 ### Immutable Variables
-Variables should be `const` unless logic requires mutation.
+Variables should be `const` unless logic requires mutation (where `let` is used instead but avoid `var`).
 
 Good:
 ```js
@@ -222,7 +222,7 @@ else return m;
 
 ### Graceful Async
 
-Async operations should include handle expected errors.
+Async operations should handle expected errors.
 
 Good:
 ```js
@@ -266,10 +266,7 @@ const handleError = e => console.error(e);
 const whenFetchedCodeRules = () => Promise.resolve('...');
 const whenFetchedCodeStyles = () => Promise.resolve('...');
 // Dependent async action.
-const whenLogged = data => new Promise(res => {
-    console.log(res);
-    res();
-});
+const whenLogged = data => new Promise(res => res(console.log(data)));
 
 Promise.all([whenFetchedCodeRules, whenFetchedCodeStyles]) // Unblocked independent async actions.
     // No promise nesting.
@@ -315,7 +312,7 @@ whenFetchedCodeRules()
 
 ### Unused Code
 
-Unused code should be removed. If the code may be required at a later date, it should be commentted with an explaination.
+Unused code should be removed. If the code may be required at a later date, it should be commented with an explanation.
 
 Good:
 ```js
@@ -337,13 +334,13 @@ console.log('Unused code that may be required later');
 
 All names should be concise and descriptive where possible, and abide the following rules:
 - Casing:
-    - File names should be camelCase unless representing a class
-    - Variable, function, and instance names should be camelCase
-    - Class names should be PascalCase
+    - File names should be `camelCase` unless representing a class
+    - Variable, function, and instance names should be `camelCase`
+    - Class names should be `PascalCase`
 - Semantics:
     - Variable and class names should be nouns relevant to their value
     - Boolean variable names should indicate a toggleable state
-    - Acronyms should remain camelCased
+    - Acronyms should remain `camelCased`
     - Function names should be prepended with a verb indicating their action
     - Async functions names should be prepended with `when`
 
@@ -768,7 +765,7 @@ const userName = user.userName ?? user.name ?? 'Unknown';
 
 ### Simple Optional Chaining
 
-Optional chaining can be used in place of complex null conditionals but should:
+Optional chaining can be used in place of complex conditionals but should:
 - remain readable
 - remain explicit for non-boolean values
 - not be overused
@@ -789,7 +786,7 @@ const hasStats = user => user?.details?.stats == null
 
 Bad:
 ```js
-// Shouldn't use implicit checks on non-boolean values.
+// Implicit checks on non-boolean values.
 if (data?.user?.name) setName(data.user.name);
 
 // Overuse of optional chaining.
@@ -1033,7 +1030,7 @@ Iterable components (e.g., array) should have a unique `key` attribute.
 Good:
 ```jsx
 const A = [<A key={0} />, <A key={1} />];
-const B = [1, 2].map((a, i) => <A key={i} />);
+const B = [1, 2].map((_, i) => <A key={i} />);
 ```
 
 Bad:
