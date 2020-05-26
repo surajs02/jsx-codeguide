@@ -321,8 +321,8 @@ const whenFetchedCodeStyles = () => Promise.resolve('...');
 const whenLogged = data => new Promise(res => res(console.log(data)));
 
 Promise.all([whenFetchedCodeRules, whenFetchedCodeStyles]) // Unblocked independent async actions.
-    // No promise nesting.
-    .then(whenLogged)
+    // Reduced promise nesting.
+    .then(results => Promise.all(results.map(whenLogged)))
     .catch(handleError);
 ```
 
