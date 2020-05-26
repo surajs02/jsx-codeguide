@@ -143,19 +143,19 @@ The `undefined` and `null` values represent unset variables and are treated as t
 
 Primitive type initial values:
 
-|Type|Initial Value|
-|---|---|
-|`boolean`|`false`|
-|`number`|`0`|
+|Type|Initial Value|Existence Conditional
+|---|---|---|
+|`boolean`|`false`|`a`|
+|`number`|`0`|`!isNan(a)`|
 
 Reference type initial values:
 
-|Type|Initial Value|
-|---|---|
-|`string`|nullish|
-|`object`|nullish|
-|Array (`object`)|nullish or `[]`|
-|`function`|nullish|
+|Type|Initial Value|Existence Conditional|
+|---|---|---|
+|`string`|nullish|`a != null && typeof a === 'string'`|
+|`object`|nullish|`a != null`|
+|`object` (Array)|nullish or `[]`|`a != null && Array.isArray(a)`|
+|`function`|nullish|`a != null && typeof a === 'function'`|
 
 Good:
 ```js
@@ -215,14 +215,14 @@ Conditionals should be simple, explicit, and readable hence should not include c
 
 Good:
 ```js
-a = 1;
+const a = 1;
 const b = a > 0;
 const c = a > 0; // `a > 0 === true` is also fine.
 ```
 
 Bad:
 ```js
-a = 1;
+const a = 1;
 const b = a > 0 ? true : false;
 const c = a > 0 !== false; // Never use inverted complex booleans like `x !== false`.
 ```
@@ -607,14 +607,12 @@ Non-trailing commas should be followed by a space.
 
 Good:
 ```js
-const a = 1, b = 2;
-const c = { n: 1, m: 2 };
+const a = { m: 1, n: 2 };
 ```
 
 Bad:
 ```js
-const a = 1 ,b = 2;
-const c = { n: 1 , m: 2 };
+const a = { m: 1 , n: 2 };
 ```
 
 [Go to top](#table-of-contents)
