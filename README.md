@@ -742,28 +742,6 @@ const c = ()=>console.log('bad');
 
 [Go to top](#table-of-contents)
 
-### Arrow Body Brackets Presence
-
-Curly brackets should be omitted in arrow function bodies unless required for logic.
-
-Good:
-```js
-const a = () => console.log('good');
-const b = () => {
-    // ...
-    console.log('good');
-};
-```
-
-Bad:
-```js
-const a = () => {
-    console.log('bad');
-};
-```
-
-[Go to top](#table-of-contents)
-
 ### Simple Null Coalescing
 
 Prefer available functions when null coalescing several parameters.
