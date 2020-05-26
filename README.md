@@ -112,12 +112,14 @@ console.log(a);
 The `undefined` and `null` values represent unset variables and are treated as the same value (i.e., nullish) hence can be caught via nullish conditionals (e.g., `x == null`).
 
 Primitive type initial values:
+
 |Type|Initial Value|
 |---|---|
 |`boolean`|`false`|
 |`number`|`0`|
 
 Reference type initial values:
+
 |Type|Initial Value|
 |---|---|
 |`string`|nullish|
