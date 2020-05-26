@@ -16,6 +16,8 @@ Opinionated guidelines that promote JSX code maintainability via:
         - [Implicit Boolean Conditionals](#implicit-boolean-conditionals)
         - [Simple Conditionals](#simple-conditionals)
         - [Simple Control Paths](#simple-control-paths)
+        - [Loop Labels](#loop-labels)
+        - [Pure Iteration](#pure-iteration)
         - [Graceful Async](#graceful-async)
         - [Simple Async](#simple-async)
         - [Unused Code](#unused-code)
@@ -38,7 +40,6 @@ Opinionated guidelines that promote JSX code maintainability via:
         - [Arrow Parentheses Presence](#arrow-parentheses-presence)
         - [Arrow Body Brackets Presence](#arrow-body-brackets-presence)
         - [Arrow Spacing](#arrow-spacing)
-        - [Arrow Body Brackets Presence](#arrow-body-brackets-presence-1)
         - [Simple Null Coalescing](#simple-null-coalescing)
         - [Simple Optional Chaining](#simple-optional-chaining)
     - [JSX Logic](#jsx-logic)
@@ -72,8 +73,8 @@ Answering **yes** to **any** of the following anti-quality questions indicates t
 |6|**Functional**|Does the code not work as expected?|
 |7|**Graceful**|Do errors impact functionality?|
 |8|**Focused**|Does the code have many responsibilities?|
-|9|**Essential**|Is the code unused?|
-|10|**Pure**|Are there obsolete mutations?|
+|9|**Essential**|Is there unused code?|
+|10|**Pure**|Are there unpredictable functions or obsolete mutations?|
 
 [Go to top](#table-of-contents)
 
@@ -222,7 +223,7 @@ else return m;
 
 [Go to top](#table-of-contents)
 
-### Avoid Loop Labels
+### Loop Labels
 
 Loop labels (e.g., `break`) are iterative `GOTO`s hence should be avoided.
 
@@ -243,6 +244,29 @@ const findFirstEven = nums => {
         }
     }
     return firstEven;
+}
+```
+
+[Go to top](#table-of-contents)
+
+### Pure Iteration
+
+Prefer iterative functions (e.g., `map`) that accept higher-order functions (ideally pure) for iterative actions.
+
+Good:
+```js
+const doubleNums = nums => nums.map(n => n * 2); // Iterative function applying pure higher-order function.
+```
+
+Bad:
+
+```js
+const doubleNums = nums => {
+    let total = 0; // Obsolete variable.
+    for (const i = 0; i < nums.length; i++) { // Impure loop.
+        total += num[i]; // Impure obsolete mutation.
+    }
+    return total;
 }
 ```
 
