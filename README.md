@@ -110,20 +110,20 @@ The `undefined` and `null` values represent unset variables and are treated as t
 Primitive type initial values:
 |Type|Initial Value|
 |---|---|
-|`boolean`|false|
-|`number`|0|
+|`boolean`|`false`|
+|`number`|`0`|
 
 Reference type initial values:
 |Type|Initial Value|
 |---|---|
 |`string`|nullish|
 |`object`|nullish|
-|Array|nullish or `[]`|
-|Function|nullish|
+|Array (`object`)|nullish or `[]`|
+|`function`|nullish|
 
 Good:
 ```js
-// Primitive types start with their own respective values.
+// Primitive types start with their respective values.
 const isLoggedIn = false; // Booleans start as `false`.
 const totalUsers = 0; // Numbers start as `0`.
 
