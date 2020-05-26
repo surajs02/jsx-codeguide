@@ -1,6 +1,6 @@
 # JSX Codeguide
 
-Opinionated guidelines that promote JSX code maintainability via:
+Suraj's opinionated guidelines that promote JSX code maintainability via:
 - Code qualities: Improve code maintainability (promoted by all code rules)
 - Code logic rules: Reduce unexpected code behaviours
 - Code style rules: Improve code consistency and readability
