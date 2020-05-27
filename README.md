@@ -102,7 +102,7 @@ console.log(c);
 
 Bad:
 ```js
-let a = 1; // Obsolete since its immutable.
+let a = 1; // Obsolete since immutable.
 console.log(a);
 ```
 
@@ -114,7 +114,7 @@ Magic numbers and other unclear yet often used values should be descriptive reus
 Good:
 ```js
 // In constants.js.
-const CLICKS_TO_WIN = 200;
+const CLICKS_TO_WIN = 3;
 const SUCCESS_COLOR = '#34A853';
 
 // In main.js.
@@ -127,7 +127,7 @@ if (clickCount >= CLICKS_TO_WIN) { // Descriptive reusable constant number.
 
 Bad:
 ```js
-if (clickCount >= 123) { // Unclear purpose of a specific number.
+if (clickCount >= 3) { // Unclear purpose of a specific number.
     buttonColor = '#34A853'; // Unclear purpose of color string.
     textColor = '#34A853';
 }
@@ -603,16 +603,18 @@ const a2 = [
 
 ### Comma Spacing
 
-Non-trailing commas should be followed by a space.
+Non-trailing commas should be appended with a space.
 
 Good:
 ```js
-const a = { m: 1, n: 2 };
+const a = [1, 2];
 ```
 
 Bad:
 ```js
-const a = { m: 1 , n: 2 };
+const a = [1 , 2];
+const b = [1 ,2];
+const c = [1,2];
 ```
 
 [Go to top](#table-of-contents)
@@ -865,9 +867,9 @@ const userName = user.userName ?? user.name ?? 'Unknown';
 ### Simple Optional Chaining
 
 Optional chaining can be used in place of complex conditionals but should:
-- remain readable
-- remain explicit for non-boolean values
-- not be overused
+- Remain readable
+- Remain explicit for non-boolean values
+- Not be overused
 
 Good:
 ```js
