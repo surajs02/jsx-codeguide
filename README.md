@@ -14,18 +14,31 @@ Suraj's opinionated guidelines that promote JSX code maintainability via:
         - [Immutable Variables](#immutable-variables)
         - [Magic Numbers](#magic-numbers)
         - [Predictable Initial Values](#predictable-initial-values)
+        - [Useful Variables](#useful-variables)
         - [Implicit Boolean Conditionals](#implicit-boolean-conditionals)
         - [Simple Conditionals](#simple-conditionals)
+        - [Explicit Conditionals](#explicit-conditionals)
+        - [Query First Conditionals](#query-first-conditionals)
         - [Simple Control Paths](#simple-control-paths)
         - [Pure Control Paths](#pure-control-paths)
         - [Loop Labels](#loop-labels)
         - [Pure Iteration](#pure-iteration)
         - [Graceful Async](#graceful-async)
+        - [Async Contains Await](#async-contains-await)
         - [Simple Async](#simple-async)
         - [Unused Code](#unused-code)
+        - [Optional Parameters Last](#optional-parameters-last)
+        - [Useful Constructors](#useful-constructors)
+        - [Unique Class Members](#unique-class-members)
+        - [Unique Imports](#unique-imports)
+        - [Throw Errors](#throw-errors)
     - [JS Styles](#js-styles)
         - [Naming](#naming)
         - [Comments](#comments)
+        - [Useful Docs](#useful-docs)
+        - [Essential Console Logs](#essential-console-logs)
+        - [Conditional Debugger](#conditional-debugger)
+        - [End Files With Empty Line](#end-files-with-empty-line)
         - [Unary Operator Spacing](#unary-operator-spacing)
         - [Binary Operator Spacing](#binary-operator-spacing)
         - [Operator Linebreaks](#operator-linebreaks)
@@ -34,10 +47,14 @@ Suraj's opinionated guidelines that promote JSX code maintainability via:
         - [Semicolon Presence](#semicolon-presence)
         - [Parentheses Presence](#parentheses-presence)
         - [Indentation](#indentation)
+        - [Function Parentheses Placement](#function-parentheses-placement)
         - [Curly Bracket Style](#curly-bracket-style)
+        - [Consistent Spacing](#consistent-spacing)
+        - [Keyword Spacing](#keyword-spacing)
         - [Curly Bracket Presence](#curly-bracket-presence)
         - [Object Curly Bracket Spacing](#object-curly-bracket-spacing)
         - [Object Colon Spacing](#object-colon-spacing)
+        - [Object Dot Notation](#object-dot-notation)
         - [Quote Presence](#quote-presence)
         - [Arrow Parentheses Presence](#arrow-parentheses-presence)
         - [Arrow Body Brackets Presence](#arrow-body-brackets-presence)
@@ -177,8 +194,30 @@ const isLoggedIn; // Boolean.
 const totalUsers; // Number.
 
 // Non-nullish references cannot be caught by nullish conditionals.
-let userName = ''; 
+let userName = '';
 let user = {};
+```
+
+[Go to top](#table-of-contents)
+
+### Useful Variables
+
+All variables should be declared with an initial value & in use unless their preservation is required (e.g., for reference, future work, etc.). In some cases, an unused variable must be included to access other useful data (e.g., accessing subsequent function parameters), in which case the required but unused variables should be prefixed with a double underscore (i.e., `__`, which is the prefix used to indicate variables that should be ignored by linters).
+
+Good:
+```js
+const nums = [10, 20, 30]
+const arrToIndexes = nums.map((__, i) => i); // Fine as `nums` is used, & unused `value` (indicated by `__`) is required to access `i`.
+// ... Code where `arrToIndexes` is used.
+```
+
+Bad:
+```js
+const undeclaredVar; // Bad as undeclared.
+const unusedVar = ''; // Bad as never used;
+
+const nums = [10, 20, 30]
+const arrToIndexes = nums.map((num, i) => i); // Bad as unused `num` is not indicated by `__`.
 ```
 
 [Go to top](#table-of-contents)
@@ -229,21 +268,113 @@ const c = a > 0 !== false; // Never use inverted complex booleans like `x !== fa
 
 [Go to top](#table-of-contents)
 
+### Explicit Conditionals
+
+**NOTE**: This rule builds on [Predictable Initial Values](#predictable-initial-values), & continues to allow implicit booleans via [Implicit Boolean Conditionals](#implicit-boolean-conditionals).
+
+Conditionals should be explicit (e.g., directly compare values via `===`, avoid relying on implicit truthy/falsy values like `if (string)`, separate type & value comparisons using `typeof` & `===` respectively)
+
+Good:
+```js
+// Nullish (usually applies to reference types like objects/arrays/strings).
+const input = undefined;
+if (input == null) console.log('is null');
+
+// Objects.
+const targetObj = { hello: 'hello' };
+const inputObj = 'hello';
+if (typeof inputObj === 'object' && 'hello' in inputObj) console.log('matches target');
+
+// Arrays.
+const targetArr = [1, 2, 3];
+const inputArr = [1, 2, 3];
+if (Array.isArray(inputArr) && targetArr.every(v => inputArr.includes(v))) console.log('matches target');
+
+// Booleans.
+const targetBool = true;
+const inputBool = true;
+if (inputBool === targetBool) console.log('matches target');
+
+// Numbers.
+const targetNum = 0;
+const inputNum = 0;
+if (typeof inputNum === 'number' && inputNum === targetNum) console.log('matches target');
+
+// Strings.
+const targetStr = 'hello';
+const inputStr = 'hello';
+if (typeof inputStr === 'string' && inputStr === targetStr) console.log('matches target');
+```
+
+Bad:
+```js
+// Nullish (usually applies to reference types like objects/arrays/strings).
+const input = undefined;
+if (!input) console.log('is null'); // Bad as cannot distinguish between `null` & `undefined`.
+
+// Objects.
+const targetObj = { hello: 'hello' };
+const inputObj = 'hello';
+if (inputObj == targetObj) console.log('matches target'); // Bad as doesn't check type.
+
+// Arrays.
+const targetArr = [1, 2, 3];
+const inputArr = [1, 2, 3];
+if (inputArr == targetArr) console.log('matches target'); // Bad as doesn't check type.
+
+// Booleans.
+const targetBool = true;
+const inputBool = true;
+if (inputBool == targetBool) console.log('matches target'); // Bad as doesn't check type.
+
+// Numbers.
+const targetNum = 0;
+const inputNum = 0;
+if (inputNum == targetNum) console.log('matches target');  // Bad as doesn't check type.
+
+// Strings.
+const targetStr = 'hello';
+const inputStr = 'hello';
+if (inputStr == targetStr) console.log('matches target'); // Bad as doesn't check type.
+```
+
+[Go to top](#table-of-contents)
+
+### Query First Conditionals
+
+Prefer the query value first (higher readability) then compare against the target value rather than vice-vera.
+
+Good:
+```js
+if ('red' === color) /* ... */ // Good as query boolean is first compared against the target boolean.
+```
+
+Bad:
+```js
+if (color === 'red') /* ... */ // Bad as target boolean is first compared.
+```
+
+[Go to top](#table-of-contents)
+
 ### Simple Control Paths
 
-Control paths should be simple hence should not have complexities (e.g., `return` in `else` when `if` contains `return`).
+Control paths should be simple hence should not have complexities (e.g., `return` in `else` when `if` contains `return`). Similarly, ternaries should also be simple (e.g., avoid `a ? true : false`).
 
 Good:
 ```js
 if (a) return n;
 
 return m;
+
+const isA = a;
 ```
 
 Bad:
 ```js
 if (a) return n;
 else return m;
+
+const isA = a ? true : false;
 ```
 
 [Go to top](#table-of-contents)
@@ -356,6 +487,20 @@ whenGotError(); // Unhandled promise error.
 
 [Go to top](#table-of-contents)
 
+### Async Contains Await
+
+`async` functions should contain at least 1 `await` to simplify handling.
+
+Good:
+```js
+const sleep = async () => await nativeSleep(); // Fine as contains `await`.
+```
+
+Bad:
+```js
+const sleep = async () => nativeSleep(); // Bad as doesn't contain `await`.
+```
+
 ### Simple Async
 
 Prefer `Promise`'s for simple async operations and optionally use `async/await` for complex async operations.
@@ -417,7 +562,7 @@ Unused code should be removed. If the code may be required at a later date, it s
 
 Good:
 ```js
-// TODO: Don't remove this code since it may be required for xyz. 
+// TODO: Don't remove this code since it may be required for xyz.
 // console.log('Unused code that may be required later')
 ```
 
@@ -425,6 +570,130 @@ Bad:
 ```js
 console.log('Unused code');
 console.log('Unused code that may be required later');
+```
+
+[Go to top](#table-of-contents)
+
+### Optional Parameters Last
+
+Optional parameters should all be preceeded by all non-optional parameters as this improves signature readability whilst reducing the verbocity & complexity of calls.
+
+Good:
+```js
+const createUser = (firstName, lastName, active = false) => /* ... */;
+const activeUser = createUser('hello', 'world', true);
+const inactiveUser = createUser('hello', 'world'); // Clean & readable.
+```
+
+Bad:
+```js
+const createUser = (firstName, active = false, lastName) => /* ... */;
+const activeUser = createUser('hello', true, 'world');
+const inactiveUser = createUser('hello', null, 'world'); // Verbose & low readability.
+```
+
+[Go to top](#table-of-contents)
+
+### Useful Constructors
+
+Classes must have useful non-empty constructors.
+
+Good:
+```js
+class User {} // Fine as constructor obsolete.
+
+class User {
+    constructor (options) {
+        setup(options); // Fine as constructor runs setup.
+    }
+}
+
+class Admin extends User {
+    constructor (options) {
+      super(options);
+    }
+}
+```
+
+Bad:
+```js
+class User {
+    constructor () {} // Bad as empty constructor.
+}
+
+class Admin extends User {
+    constructor (options) {
+      super(options);
+    }
+}
+```
+
+### Unique Class Members
+
+Classes must have unique members hence no duplicates.
+
+Good:
+```js
+class User {
+    _firstName;
+    _lastName;
+
+    constructor { /* ... */ }
+}
+```
+
+Bad:
+```js
+class User {
+    _firstName;
+    _firstName; // Bad as duplicate member.
+    _lastName;
+
+    constructor { /* ... */ }
+}
+```
+
+[Go to top](#table-of-contents)
+
+### Unique Imports
+
+Imports must be unique hence no duplicates.
+
+Good:
+```js
+import User from 'user';
+import { first, last } from 'util';
+```
+
+Bad:
+```js
+import User from 'user';
+import { first } from 'util';
+import { first, last } from 'util'; // Bad as duplicate import.
+```
+
+[Go to top](#table-of-contents)
+
+### Throw Errors
+
+Only errors should be thrown to improve consistency & readability hence avoid throwing literals.
+
+Good:
+```js
+try {
+    // ...
+} catch (e) {
+    throw new Error(e); // Good as throwing error.
+}
+```
+
+Bad:
+```js
+try {
+    // ...
+} catch {
+    throw 'error'; // Bad as throwing literal string.
+}
 ```
 
 [Go to top](#table-of-contents)
@@ -504,6 +773,104 @@ Bad:
 if (true)
 // Bad since impacts readability.
 return true;
+```
+
+[Go to top](#table-of-contents)
+
+### Useful Docs
+
+Docs like `JSDoc` is not required but may be included if useful (e.g., useful for signatures but not useful for showing types in `*.ts` files as TS already provides typing hence obsoletes `JSDoc` types).
+
+Good:
+```typescript
+// index.js
+/**
+ * Adds 2 numbers.
+ * @param {number} a // Good as type & param info is useful in js files.
+ * @param {number} b
+ * @returns {number} The sum.
+ */
+const add = (a, b) => a + b;
+
+// index.ts
+/**
+ * Adds 2 numbers.
+ * @param a // Good as type info is obsolete in TS files but param info remains useful.
+ * @param b
+ * @returns The sum.
+ */
+const add = (a, b) => a + b;
+```
+
+Bad:
+```typescript
+// index.ts
+/**
+ * Adds 2 numbers.
+ * @param {number} a // Bad as type info is obsolete in TS files.
+ * @param {number} b
+ * @returns {number} The sum.
+ */
+const add = (a, b) => a + b;
+```
+
+[Go to top](#table-of-contents)
+
+### Essential Console Logs
+
+Avoid leaving generic non-essential console logs (e.g., `console.log`) as these reduce readability by polluting the codebase & logging outputs.
+
+Useful console logs with essential purposes (e.g., `info`, `debug`, `warn`, `error`) may be preserved.
+
+Good:
+```js
+// Useful console logs.
+console.info(initialState);
+console.debug(globalState);
+console.warn(unexpectedState);
+console.error(thrownError);
+```
+
+Bad:
+```js
+// Obsolete console logs.
+console.log('test');
+console.log(temporaryVar);
+```
+
+[Go to top](#table-of-contents)
+
+### Conditional Debugger
+
+Avoid leaving `debugger` or development tools in production code. If development tools are required, ensure they only run in the development environment;
+
+Good:
+```js
+if (isDev) debugger; // Good as exclusive to development environment.
+```
+
+Bad:
+```js
+// ...
+debugger; // Bad as will run in all environments.
+// ...
+```
+
+### End Files With Empty Line
+
+Files should end with an empty line
+
+Good:
+```js
+// index.js
+// ... // Good as empty line below:
+
+```
+
+Bad:
+```js
+// index.js
+// ... // Bad as no empty line at end of file
 ```
 
 [Go to top](#table-of-contents)
@@ -621,7 +988,7 @@ const c = [1,2];
 
 ### Semicolon Presence
 
-**All** statements should end with a semicolon.
+**All** statements should end with a semicolon with no spacing on either side.
 
 Good:
 ```js
@@ -632,8 +999,6 @@ Bad:
 ```js
 const a = 1
 ```
-
-[Go to top](#table-of-contents)
 
 ### Parentheses Presence
 
@@ -653,7 +1018,7 @@ const a = b + c;
 
 ### Indentation
 
-Indented code should have 4 spaces.
+Indented code should have 4 spaces (can be input via `TAB` key but **must** be saved as spaces).
 
 Good:
 ```js
@@ -665,7 +1030,7 @@ if (true) {
 
 Bad:
 ```js
-if (true) { 
+if (true) {
 // ...
 console.log('bad'); // No spaces.
 }
@@ -674,6 +1039,32 @@ if (true) {
   // ...
   console.log('bad'); // 2 spaces.
 }
+```
+
+[Go to top](#table-of-contents)
+
+### Function Parentheses Placement
+
+Although arrow functions are preferred over `function` blocks for several reasons (e.g., hoisting, verbocity, etc.), certain situations may require `function` blocks (e.g., prototypes/binding & `this` scoping, stack traces, etc.).
+
+Hence `function` blocks & their calls require styling such as function names being directly appended with their argument containing parentheses.
+
+Good:
+```js
+function add(a, b) {
+    return a + b;
+}
+
+add(1, 2);
+```
+
+Bad:
+```js
+function add (a, b) { // Bad as inconsistent spacing between name & opening parentheses.
+    return a + b;
+}
+
+add (1, 2); // Bad as inconsistent spacing.
 ```
 
 [Go to top](#table-of-contents)
@@ -693,13 +1084,102 @@ if (a)  {
 
 Bad:
 ```js
-if (a) 
+if (a)
 {
     // ...
 }
-else 
+else
 {
     // ...
+}
+```
+
+### Consistent Spacing
+
+Spacing between tokens (e.g., keywords, variables & operators in expresssions, etc.) should be consistent hence non-excessive (e.g., avoid repeated successive spacing).
+
+Good:
+```js
+if (a === 1) /* ... */ // Good as spacing is consistent.
+```
+
+Bad:
+```js
+if (a    ===1) /* ... */ // Bad as inconsistent spacing (excessive 4 spaces right of `===` whilst 0 spaces on the left).
+```
+
+### Keyword Spacing
+
+Keywords should have space on either side unless otherwise required.
+
+Good:
+```js
+if (a) /* ... */; // Good as keyword has spacing as needed.
+else /* ... */;
+
+if (b) {
+    // ...
+    // ...
+}
+
+if (c) {
+    // ...
+    // ...
+} else if (d) {
+    // ...
+    // ...
+} else {
+    // ...
+    // ...
+}
+
+switch (weekday) {
+    case 'MONDAY': { // Case scoping is useful to avoid shadowing vars.
+        let a = false;
+        break;
+    }
+    // ...
+    default: {
+        // ...
+    }
+}
+
+while (a) {
+    // ...
+    // ...
+}
+
+for (let i = 0; i < 10; i++) {
+    // ...
+    // ...
+}
+
+class Admin extends User {
+    constructor(options) { // Fine as function/method names are directly followed by parentheses.
+        super(options);
+    }
+}
+```
+
+Bad:
+```js
+if(a) /* ... */; // Bad as needlessly missing spacing.
+
+switch(weekday) {
+    case'MONDAY': { // Bad as missing spacing.
+        let a = false;
+        break;
+    }
+    // ...
+    default: {
+        // ...
+    }
+}
+
+class Admin extends User{ // Bad as missing spacing
+    constructor(options) {
+        super(options);
+    }
 }
 ```
 
@@ -759,6 +1239,46 @@ Bad:
 ```js
 const a = { n:1 };
 const b = { n :1 };
+```
+
+[Go to top](#table-of-contents)
+
+### Object Dot Notation
+
+Prefer dot notation (i.e., `obj.prop`) over bracket/index notation (i.e., `obj['prop']`) for objects unless required by exceptional cases (e.g., properties with `kebab-case` & `snake_case` keys).
+
+Good:
+```js
+const cases = {
+    lowercase: 1,
+    UPPERCASE: 1,
+    snake_case: 1,
+    'kebab-case': 1,
+    class: 1, // Keyword.
+};
+
+const lowercase = cases.lowercase;
+const UPPERCASE = cases.UPPERCASE;
+const snakeCase = cases['snake_case']; // Exceptional case.
+const kebabCase = cases['kebab-case']; // Exceptional case.
+const keyword = cases.class;
+```
+
+Bad:
+```js
+const cases = {
+    lowercase: 1,
+    UPPERCASE: 1,
+    snake_case: 1,
+    'kebab-case': 1,
+    class: 1, // Keyword.
+};
+
+const lowercase = cases['lowercase']; // Obsolete & verbose usage of index notation.
+const UPPERCASE = cases['UPPERCASE'];  // Obsolete & verbose usage of index notation.
+const snakeCase = cases['snake_case']; // Exceptional case.
+const kebabCase = cases['kebab-case']; // Exceptional case.
+const keyword = cases['case'];  // Obsolete & verbose usage of index notation.
 ```
 
 [Go to top](#table-of-contents)
