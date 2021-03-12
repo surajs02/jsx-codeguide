@@ -1,9 +1,9 @@
 # JSX Codeguide
 
-Suraj's opinionated guidelines that promote JSX code maintainability via:
-1. Code qualities: Improve code maintainability (promoted by all code rules)
-1. Code logic rules: Reduce unexpected code behaviours
-1. Code style rules: Improve code consistency and readability
+Opinionated code guidelines that promote JS/JSX & TS/JSX (builds on JS/JSX rules) code maintainability via:
+1. Code qualities: Improves code maintainability (promoted by all code rules)
+1. Code logic rules: Reduces unexpected code behaviours
+1. Code style rules: Improves code consistency and readability
 
 # Table of Contents
 
@@ -21,6 +21,8 @@ Suraj's opinionated guidelines that promote JSX code maintainability via:
     1. [Pure Control Paths](#pure-control-paths)
     1. [Loop Labels](#loop-labels)
     1. [Pure Iteration](#pure-iteration)
+    1. [Useful Iteration](#useful-iteration)
+    1. [Pure Functions](#pure-functions)
     1. [Graceful Async](#graceful-async)
     1. [Async Contains Await](#async-contains-await)
     1. [Simple Async](#simple-async)
@@ -81,6 +83,17 @@ Suraj's opinionated guidelines that promote JSX code maintainability via:
     1. [Closing Tag Presence](#closing-tag-presence)
     1. [Ordered Lifecycle Methods](#ordered-lifecycle-methods)
     1. [Explicit Fragments](#explicit-fragments)
+1. [TS Logic](#ts-logic)
+    1. [TS Imports](#ts-imports)
+    1. [Explicit Any](#explicit-any)
+    1. [Useful Type Cast](#useful-type-cast)
+    1. [TS Graceful Async](#ts-graceful-async)
+    1. [Explicit Catches](#explicit-catches)
+    1. [Useful Inference](#useful-inference)
+    1. [Abstract Interfaces](#abstract-interfaces)
+    1. [Immutable Members](#immutable-members)
+1. [TS Styles](#ts-styles)
+    1. [Type Spacing](#type-spacing)
 
 ## Code Qualities
 
@@ -282,48 +295,59 @@ Good:
 ```js
 // Nullish (usually applies to reference types like objects/arrays/strings).
 const input = undefined;
-if (input == null) console.log('is null');
+if (input == null) console.log('is null'); // Good as `==` can be used to test coalesced null (i.e., undefined | null).
 
 // Objects.
-const targetObj = { hello: 'hello' };
-const inputObj = 'hello';
-if (typeof inputObj === 'object' && 'hello' in inputObj) console.log('matches target');
+const target = { hello: 'hello' };
+const input = 'hello';
+const inputExists = typeof input === 'object'; // Good as existance checked accordingly for type.
+if (inputExists) console.log('exists');
+if (inputExists && /* ... Compare keys/values */) console.log('matches target');
 
 // Arrays.
-const targetArr = [1, 2, 3];
-const inputArr = [1, 2, 3];
-if (Array.isArray(inputArr) && targetArr.every(v => inputArr.includes(v))) console.log('matches target');
+const target = [1, 2, 3];
+const input = [1, 2, 3];
+const inputExists = Array.isArray(input); // Good as existance checked accordingly for type.
+if (inputExists) console.log('exists');
+if (inputExists && target.every(v => inputArr.includes(v))) console.log('matches target');
 
 // Booleans.
-const targetBool = true;
-const inputBool = true;
-if (inputBool === targetBool) console.log('matches target');
+const target = true;
+const input = true;
+const inputExists = typeof input === 'boolean'; // Good as existance checked accordingly for type.
+if (inputExists) console.log('exists'); // Fine as booleans are the only type to be implicitly checked.
+if (inputExists && input === target) console.log('matches target');
 
 // Numbers.
-const targetNum = 0;
-const inputNum = 0;
-if (typeof inputNum === 'number' && inputNum === targetNum) console.log('matches target');
+const target = 0;
+const input = 0;
+const inputExists = typeof input === 'number'; // Good as existance checked accordingly for type.
+if (inputExists) console.log('exists');
+if (inputExists && input === target) console.log('matches target');
 
 // Strings.
-const targetStr = 'hello';
-const inputStr = 'hello';
-if (typeof inputStr === 'string' && inputStr === targetStr) console.log('matches target');
+const target = 'hello';
+const input = 'hello';
+const inputExists = typeof input === 'string'; // Good as existance checked accordingly for type.
+if (inputExists) console.log('exists');
+if (inputExists && input === targetStr) console.log('matches target');
 ```
 
 Bad:
 ```js
-// Nullish (usually applies to reference types like objects/arrays/strings).
 const input = undefined;
-if (!input) console.log('is null'); // Bad as cannot distinguish between `null` & `undefined`.
+if (!input) console.log('is null'); // Bad as doesn't check type & cannot distinguish between `null` & `undefined`.
 
 // Objects.
-const targetObj = { hello: 'hello' };
-const inputObj = 'hello';
-if (inputObj == targetObj) console.log('matches target'); // Bad as doesn't check type.
+const target = { hello: 'hello' };
+const input = 'hello';
+if (inputExists) console.log('exists'); // Bad as doesn't check type.
+if (input == target) console.log('matches target'); // Bad as doesn't check type.
 
 // Arrays.
 const targetArr = [1, 2, 3];
 const inputArr = [1, 2, 3];
+if (inputExists) console.log('exists'); // Bad as doesn't check type.
 if (inputArr == targetArr) console.log('matches target'); // Bad as doesn't check type.
 
 // Booleans.
@@ -334,11 +358,13 @@ if (inputBool == targetBool) console.log('matches target'); // Bad as doesn't ch
 // Numbers.
 const targetNum = 0;
 const inputNum = 0;
+if (inputExists) console.log('exists'); // Bad as doesn't check type.
 if (inputNum == targetNum) console.log('matches target');  // Bad as doesn't check type.
 
 // Strings.
 const targetStr = 'hello';
 const inputStr = 'hello';
+if (inputExists) console.log('exists'); // Bad as doesn't check type.
 if (inputStr == targetStr) console.log('matches target'); // Bad as doesn't check type.
 ```
 
@@ -452,6 +478,89 @@ const doubleNums = nums => {
     }
     return total;
 }
+```
+
+### Useful Iteration
+
+If `for` loops are required, prefer utility iteration via `for-of` over `for-in` (reserved for objects but often mistakenly used on arrays) for iterating array values.
+
+Prefer `.forEach` when iterating **both** array values & indexs.
+
+Standard impure  `for` loops should only be used as a last resort when pure iteration & utility iteration cannot fulfill a requirement (very rare).
+
+Good:
+```js
+const nums = [1, 2, 3];
+nums.forEach((num, index) => /* ... Code using value & index */); // Good as both value & index are used via `.forEach`.
+for (const num of nums) { /* ... Code using value */ } // Good as only value used.
+```
+
+Bad:
+```js
+const nums = [1, 2, 3];
+for (const num in nums) { /* ... Code using value */ } // Bad as attempted to only use value but `for-in` provides index first.
+for (let i = 0; i < nums.length; i++) { /* ... Code using value */ } // Bad as only value is used hence `for-of` would be better.
+```
+
+[Go to top](#table-of-contents)
+
+### Pure Functions
+
+**NOTE**: This rule builds on [Pure Iteration](#pure-iteration).
+
+Prefer using pure functions that focus on providing a non-mutative output from inputs with minimal logic & side effects.
+
+Pure functions should promote reusability & readability whilst reducing impure states & verbocity.
+
+Fully pure functions are naturally unbounded (i.e., have no binding or `this` scoping) hence are easily passable & composable hence are preferred over impure & likely bound functions
+
+Good:
+```js
+// Reduced state/logic.
+const array = [1, 2, 3];
+const hasOne = array.includes(1); // Good as doesn't introduce obsolete state/logic to provide an output.
+
+// Unbounded class function works correctly
+class User {
+    public log = () => console.log(this); // Fine as bound to the instance.
+    public toString() { return `${firstName} ${lastName}`; } // Good as impure bound state is exposed as purer controlled state.
+}
+const user = new User();
+const log = user.log;
+log(); // Fine as correctly logs `user`.
+const logUser = user => console.log(user.toString());
+logUser(user); // Good as pure composable function correctly logs `user`.
+
+// Passing unbounded function works correctly.
+const nums = [1, 2, 3];
+const mapNums = (arr, mapper) => arr.map(mapper); // Good as pure hence composable.
+const doubledNums = mapNums(num => num * 2); // Good as works correctly.
+```
+
+Bad:
+```js
+// Increased state/logic.
+const array = [1, 2, 3];
+const INVALID_INDEX = -1;
+const hasOne = array.indexOf(1) !== INVALID_INDEX; // Bad as requires obsolete state & comparison logic.
+
+// Bounded function works incorrectly.
+class User {
+  public log() {
+    console.log(this);
+  }
+  public getOrderKeys(orders) {
+      Object.keys(orders)
+  }
+}
+const user = new User();
+const log = user.log;
+log(); // Bad as incorrectly logs global object (e.g., `window`) instead of `user`.
+
+// Passing unbounded function works correctly.
+const nums = [1, 2, 3];
+const mapNums = nums.map
+const doubledNums = mapNums(num => num * 2); // Bad as errors since bound scope was lost.
 ```
 
 [Go to top](#table-of-contents)
@@ -1876,6 +1985,239 @@ const A = <React.Fragment><A /></React.Fragment>;
 Bad:
 ```jsx
 const A = <><A /></>;
+```
+
+[Go to top](#table-of-contents)
+
+## TS Logic
+
+### TS Imports
+
+Prefer `default` & named imports over `*` imports (e.g., avoid `import * as util from 'util';`) to maintain consistency & interoperability with JS/Node modules.
+
+The `*` imports are avoided as they can be inconsistent & break if a module exports a non-object, furthermore, `*` imports are increasingly deprecated by encouraging `default`/named imports via the `tsc` `esModuleInterop` flag.
+
+Node `require` imports are allowed in `*.js` files to promote JS/TS interoperability but standard `default`/named imports should preferred in TS files to preserve typing.
+
+Good:
+```typescript
+import util, { first, last } from 'util'; // Good as using consistent `default` & named imports.
+const util = require('util'); // Fine for JS/TS interoperability.
+```
+
+Bad:
+```typescript
+import * as util, { first, last } from 'util'; // Bad as using unique inconsistent `*` import.
+```
+
+[Go to top](#table-of-contents)
+
+### Explicit Any
+
+Primitive types (e.g., `boolean`, `number`, `string`, `unknown`, etc.), generic types (e.g., `Record<K, V>`) , & custom types (e.g., `User`) are preferred over the `any` type to ensure type safety (e.g., `boolean` is a known type, & even `unknown` offers better typeng over `any` since `unknown` cannot be reassigned).
+
+However, if the `any` type is required (e.g., for complex type signatures or to support usage of a non-typed 3rd party library), the `any` type should be explicit to indicate it was used intentionally.
+
+Good:
+```typescript
+const add = (a: number, b: number): number => a + b; // Good as explicit typing.
+const add = (a: number, b: number) => a + b; // Infered return type is fine.
+const add = (a = 0, b = 0) => a + b; // Obvious inference is fine.
+```
+
+### Useful Type Cast
+
+Type casts should change the type of a value, & shouldn't be used in place of null assertions (e.g., avoid `let maybe: (number | undefined); maybe as string;`).
+
+Good:
+```typescript
+// Type Cast.
+const num = 3;
+const castedToNum = '3' as number; // Good as cast used to ensure expected type.
+function castToNum => (n: number | undefined): number => n!; // Good as cast used to ensure expected type.
+
+// Null assertion.
+const maybe = Math.random() > 0.5 ? true : undefined;
+const num = maybe!; // Good as using explicit null assertion.
+```
+
+Bad:
+```typescript
+// Type Cast.
+const num = 3;
+const castedToNum = foo!;  // Bad as obsolete cast leaves type unchanged.
+const castedToNum = 3 as number; // Bad as obsolete cast leaves type unchanged.
+const castedToNum = 3 as <3>; // Bad as obsolete cast leaves type unchanged.
+const castedToNum = 3 as num;
+const castToNum = (n: number): number => n!; // Bad as obsolete cast leaves type unchanged.
+
+// Null assertion.
+const maybe = Math.random() > 0.5 ? true : undefined;
+const num = maybe as string; // Bad as cast used for null assertion
+```
+
+[Go to top](#table-of-contents)
+
+### TS Graceful Async
+
+**NOTE**: Builds on [Graceful Async](#graceful-async)
+
+All promise based code (i.e., `Promise`s & `async`/`await`) should be handled unless in exceptional cases (e.g., indicated by `void` type or contained in an `async` IFFE).
+
+Good:
+```typescript
+const sleep = async (): void => await doSleep();
+void sleep(); // Fine as `async` function indicated by `void`.
+(async () => await sleep()) // Fine as `async` function contained in `async` IFFE.
+
+void Promise.reject('test'); // // Fine as `Promise` indicated by `void`.
+
+```
+
+Bad:
+```typescript
+const sleep = async (): void => await doSleep();
+sleep(); // Bad as `async` function not indicated by `void`.
+(() => sleep()) // Bad as `async` function not contained in `async` IFFE.
+
+void Promise.reject('test'); // // Bad as `Promise` not indicated by `void`.
+```
+
+[Go to top](#table-of-contents)
+
+### Explicit Catches
+
+Caught errors should be explicitly typed.
+
+Good:
+```typescript
+try {/* ... */}
+catch (e: Error) {/* ... */} // Good as explicitly & specifically typed.
+catch (e: any) {/* ... */} // Fine as explicitly typed as `any`.
+```
+
+Bad:
+```typescript
+try {/* ... */}
+catch (e) {/* ... */} // Bad as not explicitly typed.
+```
+
+[Go to top](#table-of-contents)
+
+### Useful Inference
+
+Typing is encouraged but may be omitted if the type is evident from the context (e.g., variable value, function parameter/return values, etc.) to reduce verbocity whilst preserving type safety.
+
+Good:
+```typescript
+const num = 0; // Fine as type is evident from value.
+
+class User {
+  age = 5;  // Fine as type is evident from value.
+}
+
+const add = (a = 0, b = 0) => a + b; // Fine as typing is evident from parameters & return value.
+
+const adduser = (id: number, name: string, active: boolean): User {/* ... */} // Good as typing is evident from parameters or return value.
+```
+
+Bad:
+```typescript
+let num; // Bad as type not evident from value.
+let num = fetchNums().data ; // Bad as type not evident from value.
+
+class User {
+  age;  // bad as type not evident from value.
+}
+
+const add = (a, b) => {/* ... */}; // Fine as typing not evident from parameters or return value.
+
+const adduser = (id, name, active): {/* .. */} // Bad as typing not evident from parameters or return value.
+```
+
+[Go to top](#table-of-contents)
+
+### Abstract Interfaces
+
+Interfaces shouldn't be instantiable hence shouldn't contain constructors but may declare construction for implementors.
+
+Classes should only be instantiable via constructor, i.e., avoid misusing `new` & `constructor` keywords.
+
+Good:
+```typescript
+class Admin {
+  constructor() {/* .. */} // Good as classes can be instantiated via `constructor`.
+}
+interface User {
+  new (): Admin; // Good as interfaces can declare construction for implementors.
+}
+```
+
+Bad:
+```typescript
+class Admin {
+  new(): Admin; // Bad as classes should only be instantiated via `constructor`.
+}
+
+interface User {
+  constructor(): void; // Bad as interfaces shouldn't be instantiated.
+}
+```
+
+[Go to top](#table-of-contents)
+
+### Immutable Members
+
+NOTE: This rule builds on [Immutable Variables](immutable-variables).
+
+Class members that aren't mutated outside of the `constructor` should be `readonly`.
+
+Good:
+```typescript
+class User {
+    public name: string; // Fine as `public` members may be mutated externally.
+    protected active = false; // Fine as `protected` members may be mutated by subclasses.
+    private readonly id: number; // Good as `readonly` since this `private` member is only mutated in the `constructor`.
+
+    constructor(name: string) {
+        this.id = Date.now();
+        this.name = name;
+    }
+
+    public setName(name: string) {
+        this.name = name;
+    }
+}
+```
+
+Bad:
+```typescript
+class User {
+    private id: number; // Bad as not `readonly` yet this `private` member is only mutated in the `constructor`.
+
+    constructor() {
+        this.id = Date.now();
+    }
+}
+```
+
+[Go to top](#table-of-contents)
+
+## TS Styles
+
+### Type Spacing
+
+Type declaration colons should only be appended with a space.
+
+Good:
+```typescript
+let num: number; // Good spacing.
+```
+
+Bad:
+```typescript
+let num : number; // Bad spacing.
+let num :number; // Bad spacing.
 ```
 
 [Go to top](#table-of-contents)
