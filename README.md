@@ -10,7 +10,7 @@ Suraj's opinionated guidelines that promote JSX code maintainability via:
 - [JSX Codeguide](#jsx-codeguide)
     - [Table of Contents](#table-of-contents)
     - [Code Qualities](#code-qualities)
-    - [JS Logic Rules](#js-logic-rules)
+    - [JS Logic](#js-logic)
         - [Immutable Variables](#immutable-variables)
         - [Magic Numbers](#magic-numbers)
         - [Predictable Initial Values](#predictable-initial-values)
@@ -62,14 +62,19 @@ Suraj's opinionated guidelines that promote JSX code maintainability via:
         - [Simple Null Coalescing](#simple-null-coalescing)
         - [Simple Optional Chaining](#simple-optional-chaining)
     - [JSX Logic](#jsx-logic)
+        - [React Scoped JSX](#react-scoped-jsx)
         - [Attribute Types](#attribute-types)
         - [Default Types](#default-types)
         - [Recursive Updates](#recursive-updates)
         - [Indirect State Mutation](#indirect-state-mutation)
         - [Safe Attributes](#safe-attributes)
     - [JSX Styles](#jsx-styles)
+        - [Component Names](#component-names)
+        - [File Structure](#file-structure)
+        - [Tag Spacing](#tag-spacing)
         - [Implicit Boolean Attribute](#implicit-boolean-attribute)
         - [Attribute Quotes](#attribute-quotes)
+        - [JSX Curly Bracket Spacing](#jsx-curly-bracket-spacing)
         - [Attribute Curly Bracket Spacing](#attribute-curly-bracket-spacing)
         - [Attribute Curly Brackets Presence](#attribute-curly-brackets-presence)
         - [Attribute Indentation](#attribute-indentation)
@@ -77,6 +82,7 @@ Suraj's opinionated guidelines that promote JSX code maintainability via:
         - [Unique Key Attribute](#unique-key-attribute)
         - [Closing Tag Presence](#closing-tag-presence)
         - [Ordered Lifecycle Methods](#ordered-lifecycle-methods)
+        - [Explicit Fragments](#explicit-fragments)
 
 ## Code Qualities
 
@@ -97,7 +103,7 @@ Answering **yes** to **any** of the following anti-quality questions indicates t
 
 [Go to top](#table-of-contents)
 
-## JS Logic Rules
+## JS Logic
 
 ### Immutable Variables
 Variables should be `const` unless logic requires mutation (where `let` is used instead but avoid `var`).
@@ -1420,6 +1426,35 @@ const hasStats = user => (user?.details?.stats?.health
 
 ## JSX Logic
 
+### React Scoped JSX
+
+JSX should be in a `*.jsx` file (similarly, TSX should be in a `*.tsx` file) that contains a `React` import to ensure the correct import is used.
+
+Good:
+```jsx
+// App.jsx
+import React from 'react';
+
+const App = <div>App</div>; // Good as JSX contained in `*.jsx` file containing the `React` import.
+
+export default App;
+```
+
+Bad:
+```jsx
+// index.js
+import React from 'react';
+
+// ... Code that doesn't use `React`.
+
+// app.js
+const App = <div>App</div>; // Bad as JSX not contained in `*.jsx` file containing the `React` import.
+
+export default App;
+```
+
+[Go to top](#table-of-contents)
+
 ### Attribute Types
 
 Components should specify `propTypes`.
@@ -1538,6 +1573,104 @@ const A = <A dangerouslySetInnerHTML={{ __html: 'bad' }} />;
 
 ## JSX Styles
 
+### Component Names
+
+Components should be stored in `PascalCase` named constant variables that serve as component variables which additionally provides the component's displayname (never pass components which a displayname).
+
+The component variable should then be exported from its `*.jsx`/`*tsx` file as `default` (if it is the main component of the file) or as a named export (if it is not the main component of the file).
+
+The component's file should have a `PascalCase` filename identical to the name of the main exported component.
+
+Good:
+```jsx
+// App.jsx; // Good as filename is identical to main component name.
+
+export const AppContainer = /* ... JSX */; // Good as non-main component is `PascalCase` `const` & has named export.
+
+const App = <div>App</div>; // Good as main component is `PascalCase` `const`.
+// ...
+export default App; // Good as main component is exported as `default`.
+```
+
+Bad:
+```jsx
+// app.js; // Bad as filename is not identical to main component name.
+
+const appContainer = /* ... JSX */; // Bad as non-main component is not `PascalCase` `const`
+export default appContainer; // Bad as non-main component is is `default` export.
+
+let app = <div>App</div>; // Bad as main component is not `PascalCase` `const`.
+// ...
+export App; // Bad as main component is named export.
+```
+
+[Go to top](#table-of-contents)
+
+### File Structure
+
+File structure should focus on allowing sharing of common code whilst grouping features & their required (potentially unique) code (hence promoting modular code where features may be relatively easily moved to new projects) whilst maintaining a flat, simple, & **consistent** file structure.
+
+Folder/file naming should be `PascalCase` for those associated with components & `camelCase` for those not associated with components.
+
+Component filenames should be a `PascalCase` noun identical to the name of their main associated component name (e.g., `App.jsx`). Non-component filenames should be `camelCase` & describe their purpose (e.g., `userActions.js`).
+
+Hence file structure is flexible but a general guideline is:
+```
+../ReactProject/
+- ... config files (e.g., `package.json`, `.gitignore`, etc.)
+- build folder/ (e.g., `build`, `dist`, etc.)
+- src/
+    - index.js
+    - index.less
+    - routes.js
+    - middleware.js
+    - store.js (i.e., Redux store)
+    - util/ (shared utilities)
+        - utilMisc.js
+        - utilMath.js
+    - state/ (example of shared Redux state `action` & `reducers` folders are preferred as there may be many different states)
+        - actions/
+            - userActions.js
+            - ...
+        - reducers/
+            - userReducer.js
+            - ...
+    - Components/
+        - Shared/ (shared components, e.g., Button, Modal, etc.)
+            - Button (example of shared component & associated file structure)
+                - Button.jsx
+                - Button.less
+                - Button.stories.js (example of unit test file)
+                - Button.test.js (example of UI test file)
+                - useDrag.js (example of React hook file)
+        - ContactPage/ (example of unique page/feature, i.e., not shared with other components)
+            - ContactContainer.jsx
+            - ContactPage.jsx
+            - ContactPage.less
+            - state/ (example of Redux state unique to ContactPage - can convert to `React.Context` if flat component)
+                - contactActions.js
+                - contactReducer.js
+```
+
+[Go to top](#table-of-contents)
+
+### Tag Spacing
+
+JSX tag brackets should have no spacing after the opening bracket & before closing bracket, & should have a space before any self-closing slash.
+
+Good:
+```jsx
+const div = <div></div>;
+const div = <div />;
+```
+
+Bad:
+```jsx
+const div = < div ></ div >;
+const div = <div/>;
+
+```
+
 ### Implicit Boolean Attribute
 
 Boolean attributes should be implicit when the boolean evaluates to `true`.
@@ -1569,6 +1702,20 @@ const A = <A x="bad" />;
 ```
 
 [Go to top](#table-of-contents)
+
+### JSX Curly Bracket Spacing
+
+Curly brackets between JSX tags should have no spacing between the curly brackets and inner expression.
+
+Good:
+```jsx
+const headline = <h1>{headline}</h1>;
+```
+
+Bad:
+```jsx
+const headline = <h1>{ headline }</h1>;
+```
 
 ### Attribute Curly Bracket Spacing
 
@@ -1713,6 +1860,24 @@ const A = createReactClass({
         // ...
     },
 });
+```
+
+[Go to top](#table-of-contents)
+
+### Explicit Fragments
+
+Fragment usage is rare (& may break React < 16.2) hence the intention to use them should be made explicit.
+
+Good:
+```jsx
+import React, { Fragment } from 'react';
+const A = <Fragment><A /></Fragment>;
+const A = <React.Fragment><A /></React.Fragment>;
+```
+
+Bad:
+```jsx
+const A = <><A /></>;
 ```
 
 [Go to top](#table-of-contents)
