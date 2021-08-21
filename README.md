@@ -92,6 +92,7 @@ Opinionated code guidelines that promote JS/JSX & TS/JSX (builds on JS/JSX rules
     1. [Useful Inference](#useful-inference)
     1. [Abstract Interfaces](#abstract-interfaces)
     1. [Immutable Members](#immutable-members)
+    1. [Graceful Nil Assertion](#graceful-nil-assertion)
 1. [TS Styles](#ts-styles)
     1. [Type Spacing](#type-spacing)
 
@@ -2193,6 +2194,31 @@ class User {
         this.id = Date.now();
     }
 }
+```
+
+[Go to top](#table-of-contents)
+
+### Graceful Nil Assertion
+
+Potential `null` & `undefined` variables should only be asserted if their value is known to not cause a `null` based `TypeError`. If errors are expected, there should be usage of refactoring, error handling, & defaults.
+
+Good:
+```typescript
+let numbers = [1, 2, 3];
+const getRandomNumber = <T>(array: T[]): T | undefined => { /* Returns number or undefined if empty array... */ };
+const r = getRandomNumber(numbers);
+numbers.includes(r!); // Nil assertion here is fine since `r` is a number.
+
+number = [];
+if (randomNumber) numbers.includes(randomNumber(numbers)!) // Fine since non-nil error handling is used.
+```
+
+Bad:
+```typescript
+const numbers = [];
+const getRandomNumber = <T>(array: T[]): T | undefined => { /* Returns number or undefined if empty array... */ };
+const r = getRandomNumber(numbers);
+numbers.includes(randomNumber(numbers)!); // Bad since `r` is undefined & no error handling is used.
 ```
 
 [Go to top](#table-of-contents)
