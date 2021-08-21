@@ -62,7 +62,7 @@ Opinionated code guidelines that promote JS/JSX & TS/JSX (builds on JS/JSX rules
     1. [Simple Null Coalescing](#simple-null-coalescing)
     1. [Simple Optional Chaining](#simple-optional-chaining)
 1. [JSX Logic](#jsx-logic)
-    1. [React Scoped JSX](#react-scoped-jsx)
+    1. [Useful JSX Files](#useful-jsx-files)
     1. [Attribute Types](#attribute-types)
     1. [Default Types](#default-types)
     1. [Recursive Updates](#recursive-updates)
@@ -1533,16 +1533,14 @@ const hasStats = user => (user?.details?.stats?.health
 
 ## JSX Logic
 
-### React Scoped JSX
+### Useful JSX Files
 
-JSX should be in a `*.jsx` file (similarly, TSX should be in a `*.tsx` file) that contains a `React` import to ensure the correct import is used.
+JSX should only be in relevant files (i.e., `*.jsx` or `*.tsx`) and React imports should be omitted unless required (e.g., if bundler doesn't parse JSX without the React import).
 
 Good:
 ```jsx
-// App.jsx
-import React from 'react';
-
-const App = <div>App</div>; // Good as JSX contained in `*.jsx` file containing the `React` import.
+// App.jsx or App.tsx
+const App = <div>App</div>; // Good as JSX contained in `*.jsx` file.
 
 export default App;
 ```
@@ -1550,14 +1548,10 @@ export default App;
 Bad:
 ```jsx
 // index.js
-import React from 'react';
 
 // ... Code that doesn't use `React`.
 
-// app.js
-const App = <div>App</div>; // Bad as JSX not contained in `*.jsx` file containing the `React` import.
-
-export default App;
+console.log('bad');
 ```
 
 [Go to top](#table-of-contents)
