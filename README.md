@@ -1132,26 +1132,34 @@ const a = b + c;
 
 ### Indentation
 
-Indented code should have 4 spaces (can be input via `TAB` key but **must** be saved as spaces).
+Indented code should have 4 spaces (can be soft `TAB`s, i.e., input via `TAB` key but **must** be saved as spaces).
+
+Note the 4 space rule serves to promote readability whilst discouraging nesting hence promoting simplicity & maintainability. However, use case & consistency should always be prioritized hence this rule can be overridden if useful (e.g., set to 2 spaces to maintain consistency within an existing codebase).
 
 Good:
 ```js
-if (true) {
+if (true) { // Good due to consistent indentation.
     // ...
-    console.log('good')
+    console.log('good'); // 4 spaces.
+    console.log('good'); // 4 spaces.
 }
 ```
 
 Bad:
 ```js
 if (true) {
-// ...
+console.log('bad'); // No spaces.
 console.log('bad'); // No spaces.
 }
 
 if (true) {
-  // ...
-  console.log('bad'); // 2 spaces.
+   console.log('bad'); // 3 spaces.
+   console.log('bad'); // 3 spaces.
+}
+
+if (true) { // Bad due to inconsistent indentation
+    console.log('bad'); // 4 spaces.
+console.log('bad'); // 0 spaces.
 }
 ```
 
