@@ -5,96 +5,101 @@ Opinionated code guidelines that promote JS/JSX & TS/JSX (builds on JS/JSX rules
 1. Code logic rules: Reduces unexpected code behaviours
 1. Code style rules: Improves code consistency and readability
 
+N.B.: These guidelines are designed to promote best practices for code logic/style, however, they can be ignored on a case-by-case basis if this promotes the Code Qualities, which should always be followed.
+
 # Table of Contents
 
-1. [Code Qualities](#code-qualities)
-1. [JS Logic](#js-logic)
-    1. [Immutable Variables](#immutable-variables)
-    1. [Magic Numbers](#magic-numbers)
-    1. [Predictable Initial Values](#predictable-initial-values)
-    1. [Useful Variables](#useful-variables)
-    1. [Implicit Boolean Conditionals](#implicit-boolean-conditionals)
-    1. [Simple Conditionals](#simple-conditionals)
-    1. [Explicit Conditionals](#explicit-conditionals)
-    1. [Query First Conditionals](#query-first-conditionals)
-    1. [Simple Control Paths](#simple-control-paths)
-    1. [Pure Control Paths](#pure-control-paths)
-    1. [Loop Labels](#loop-labels)
-    1. [Pure Iteration](#pure-iteration)
-    1. [Useful Iteration](#useful-iteration)
-    1. [Pure Functions](#pure-functions)
-    1. [Graceful Async](#graceful-async)
-    1. [Async Contains Await](#async-contains-await)
-    1. [Simple Async](#simple-async)
-    1. [Unused Code](#unused-code)
-    1. [Optional Parameters Last](#optional-parameters-last)
-    1. [Useful Constructors](#useful-constructors)
-    1. [Unique Class Members](#unique-class-members)
-    1. [Unique Imports](#unique-imports)
-    1. [Throw Errors](#throw-errors)
-1. [JS Styles](#js-styles)
-    1. [Naming](#naming)
-    1. [Comments](#comments)
-    1. [Useful Docs](#useful-docs)
-    1. [Essential Console Logs](#essential-console-logs)
-    1. [Conditional Debugger](#conditional-debugger)
-    1. [End Files With Empty Line](#end-files-with-empty-line)
-    1. [Unary Operator Spacing](#unary-operator-spacing)
-    1. [Binary Operator Spacing](#binary-operator-spacing)
-    1. [Operator Linebreaks](#operator-linebreaks)
-    1. [Trailing Commas](#trailing-commas)
-    1. [Comma Spacing](#comma-spacing)
-    1. [Semicolon Presence](#semicolon-presence)
-    1. [Parentheses Presence](#parentheses-presence)
-    1. [Indentation](#indentation)
-    1. [Function Parentheses Placement](#function-parentheses-placement)
-    1. [Curly Bracket Style](#curly-bracket-style)
-    1. [Consistent Spacing](#consistent-spacing)
-    1. [Keyword Spacing](#keyword-spacing)
-    1. [Curly Bracket Presence](#curly-bracket-presence)
-    1. [Object Curly Bracket Spacing](#object-curly-bracket-spacing)
-    1. [Object Colon Spacing](#object-colon-spacing)
-    1. [Object Dot Notation](#object-dot-notation)
-    1. [Quote Presence](#quote-presence)
-    1. [Arrow Parentheses Presence](#arrow-parentheses-presence)
-    1. [Arrow Body Brackets Presence](#arrow-body-brackets-presence)
-    1. [Arrow Spacing](#arrow-spacing)
-    1. [Simple Null Coalescing](#simple-null-coalescing)
-    1. [Simple Optional Chaining](#simple-optional-chaining)
-1. [JSX Logic](#jsx-logic)
-    1. [Useful JSX Files](#useful-jsx-files)
-    1. [Attribute Types](#attribute-types)
-    1. [Default Types](#default-types)
-    1. [Recursive Updates](#recursive-updates)
-    1. [Indirect State Mutation](#indirect-state-mutation)
-    1. [Safe Attributes](#safe-attributes)
-1. [JSX Styles](#jsx-styles)
-    1. [Component Names](#component-names)
-    1. [File Structure](#file-structure)
-    1. [Tag Spacing](#tag-spacing)
-    1. [Implicit Boolean Attribute](#implicit-boolean-attribute)
-    1. [Attribute Quotes](#attribute-quotes)
-    1. [JSX Curly Bracket Spacing](#jsx-curly-bracket-spacing)
-    1. [Attribute Curly Bracket Spacing](#attribute-curly-bracket-spacing)
-    1. [Attribute Curly Brackets Presence](#attribute-curly-brackets-presence)
-    1. [Attribute Indentation](#attribute-indentation)
-    1. [Unique Attributes](#unique-attributes)
-    1. [Unique Key Attribute](#unique-key-attribute)
-    1. [Closing Tag Presence](#closing-tag-presence)
-    1. [Ordered Lifecycle Methods](#ordered-lifecycle-methods)
-    1. [Explicit Fragments](#explicit-fragments)
-1. [TS Logic](#ts-logic)
-    1. [TS Imports](#ts-imports)
-    1. [Explicit Any](#explicit-any)
-    1. [Useful Type Cast](#useful-type-cast)
-    1. [TS Graceful Async](#ts-graceful-async)
-    1. [Explicit Catches](#explicit-catches)
-    1. [Useful Inference](#useful-inference)
-    1. [Abstract Interfaces](#abstract-interfaces)
-    1. [Immutable Members](#immutable-members)
-    1. [Graceful Nil Assertion](#graceful-nil-assertion)
-1. [TS Styles](#ts-styles)
-    1. [Type Spacing](#type-spacing)
+- [JSX Codeguide](#jsx-codeguide)
+- [Table of Contents](#table-of-contents)
+  - [Code Qualities](#code-qualities)
+  - [JS Logic](#js-logic)
+    - [Immutable Variables](#immutable-variables)
+    - [Magic Numbers](#magic-numbers)
+    - [Predictable Initial Values](#predictable-initial-values)
+    - [Useful Variables](#useful-variables)
+    - [Implicit Boolean Conditionals](#implicit-boolean-conditionals)
+    - [Simple Conditionals](#simple-conditionals)
+    - [Explicit Conditionals](#explicit-conditionals)
+    - [Query First Conditionals](#query-first-conditionals)
+    - [Simple Control Paths](#simple-control-paths)
+    - [Pure Control Paths](#pure-control-paths)
+    - [Loop Labels](#loop-labels)
+    - [Pure Iteration](#pure-iteration)
+    - [Useful Iteration](#useful-iteration)
+    - [Pure Functions](#pure-functions)
+    - [Graceful Async](#graceful-async)
+    - [Async Contains Await](#async-contains-await)
+    - [Simple Async](#simple-async)
+    - [Unused Code](#unused-code)
+    - [Optional Parameters Last](#optional-parameters-last)
+    - [Useful Constructors](#useful-constructors)
+    - [Unique Class Members](#unique-class-members)
+    - [Unique Imports](#unique-imports)
+    - [Throw Errors](#throw-errors)
+  - [JS Styles](#js-styles)
+    - [Naming](#naming)
+    - [Comments](#comments)
+    - [Useful Docs](#useful-docs)
+    - [Essential Console Logs](#essential-console-logs)
+    - [Useful Production Console Logs](#useful-production-console-logs)
+    - [Conditional Debugger](#conditional-debugger)
+    - [End Files With Empty Line](#end-files-with-empty-line)
+    - [Unary Operator Spacing](#unary-operator-spacing)
+    - [Binary Operator Spacing](#binary-operator-spacing)
+    - [Operator Linebreaks](#operator-linebreaks)
+    - [Trailing Commas](#trailing-commas)
+    - [Comma Spacing](#comma-spacing)
+    - [Semicolon Presence](#semicolon-presence)
+    - [Parentheses Presence](#parentheses-presence)
+    - [Indentation](#indentation)
+    - [Function Parentheses Placement](#function-parentheses-placement)
+    - [Curly Bracket Style](#curly-bracket-style)
+    - [Consistent Spacing](#consistent-spacing)
+    - [Keyword Spacing](#keyword-spacing)
+    - [Curly Bracket Presence](#curly-bracket-presence)
+    - [Object Curly Bracket Spacing](#object-curly-bracket-spacing)
+    - [Object Colon Spacing](#object-colon-spacing)
+    - [Object Dot Notation](#object-dot-notation)
+    - [Quote Presence](#quote-presence)
+    - [Arrow Parentheses Presence](#arrow-parentheses-presence)
+    - [Arrow Body Brackets Presence](#arrow-body-brackets-presence)
+    - [Arrow Spacing](#arrow-spacing)
+    - [Simple Null Coalescing](#simple-null-coalescing)
+    - [Simple Optional Chaining](#simple-optional-chaining)
+  - [JSX Logic](#jsx-logic)
+    - [Useful JSX Files](#useful-jsx-files)
+    - [Attribute Types](#attribute-types)
+    - [Default Types](#default-types)
+    - [Recursive Updates](#recursive-updates)
+    - [Indirect State Mutation](#indirect-state-mutation)
+    - [Safe Attributes](#safe-attributes)
+  - [JSX Styles](#jsx-styles)
+    - [Component Names](#component-names)
+    - [File Structure](#file-structure)
+    - [Tag Spacing](#tag-spacing)
+    - [Implicit Boolean Attribute](#implicit-boolean-attribute)
+    - [Attribute Quotes](#attribute-quotes)
+    - [JSX Curly Bracket Spacing](#jsx-curly-bracket-spacing)
+    - [Attribute Curly Bracket Spacing](#attribute-curly-bracket-spacing)
+    - [Attribute Curly Brackets Presence](#attribute-curly-brackets-presence)
+    - [Attribute Indentation](#attribute-indentation)
+    - [Unique Attributes](#unique-attributes)
+    - [Unique Key Attribute](#unique-key-attribute)
+    - [Closing Tag Presence](#closing-tag-presence)
+    - [Ordered Lifecycle Methods](#ordered-lifecycle-methods)
+    - [Explicit Fragments](#explicit-fragments)
+  - [TS Logic](#ts-logic)
+    - [TS Imports](#ts-imports)
+    - [Explicit Any](#explicit-any)
+    - [Useful Type Cast](#useful-type-cast)
+    - [TS Graceful Async](#ts-graceful-async)
+    - [Explicit Catches](#explicit-catches)
+    - [Useful Inference](#useful-inference)
+    - [Abstract Interfaces](#abstract-interfaces)
+    - [Immutable Members](#immutable-members)
+    - [Graceful Nil Assertion](#graceful-nil-assertion)
+  - [TS Styles](#ts-styles)
+    - [Type Spacing](#type-spacing)
 
 ## Code Qualities
 
@@ -422,7 +427,7 @@ const buttonColor = isComplete // Pure immutable value.
         ? 'orange'
         : hasErrors
             ? 'red'
-            : 'grey'; // 3 is max for inline ternaries.
+            : 'grey'; // Prefer 3 as max for inline ternaries (if necessary, use a separate ternary or if/else after this point).
 ```
 
 Bad:
@@ -438,7 +443,7 @@ else buttonColor = 'grey';
 
 ### Loop Labels
 
-Loop labels (e.g., `break`) are iterative `GOTO`s hence should be avoided.
+Loop labels (e.g., `break`, `continue`) are iterative `GOTO`s hence should be avoided, however `return` is fine & encouraged.
 
 Good:
 ```js
@@ -950,6 +955,44 @@ Bad:
 // Obsolete console logs.
 console.log('test');
 console.log(temporaryVar);
+```
+
+[Go to top](#table-of-contents)
+
+### Useful Production Console Logs
+
+Production console logs are essential console logs (e.g., `info`, `warn`, & `error`) that are preserved to aid resolving issues. Where possible, these should provide useful information including at least the log level, issue, action, & details to help identify & resolve the issue. This information should follow a template such as `log-level: message - action. details` where `details` may be a list of key-value pairs where values are enclosed with `<<>>`, e.g., `e: User has no nickname, defaulting to defaultDisplayName=<<${getDefaultDisplayName()}>> - Please check this is expected. defaultDisplayName=<<${getDefaultDisplayName()}>>.`
+
+Good:
+```js
+console.info(`i: Fetching user. userId=<<${userId}>>.`); // Fine as shows level/message/details (could optionally convert to debug log or remove).
+const user = await fetchUser(userId);
+if (DEBUG) console.debug(`d: Fetched user. user=<<${user}>>.`); // Good as debug log is omitted from production & shows level/message/details.
+if (!user) {
+    // Good as error log occurs for an unexpected situation & shows level/issue/action/details.
+    const errorMessage = `e: No user was fetched - This is unexpected, please investigate. userId=<<${userId}>>, user=<<${user}>>.`
+    console.error(errorMessage);
+
+    throw new Error(errorMessage);
+}
+if (!user.displayName) {
+    // Good as warning log for potentially unexpected but recoverable situation & shows level/issue/details.
+    console.warn(`e: User has no nickname, defaulting to defaultDisplayName - Please check this is expected. userId=<<${userId}>>, defaultDisplayName<<${getDefaultDisplayName()}>>.`);
+    user.displayName = getDefaultDisplayName();
+}
+```
+
+Bad:
+```js
+console.log('test'); // Bad as non-production log in production & shows no level/action/detail.
+console.info('Fetching user'); // Bad as no log level or details.
+const user = await fetchUser(userId);
+console.debug(user); // Bad as debug log is in production & shows no level/message.
+if (!user) throw new Error('No user'); // Bad as no log/level/action/details.
+if (!user.displayName) {
+    console.warn('Using default user name'); // Bad as no level/action/detail.
+    user.displayName = getDefaultDisplayName();
+}
 ```
 
 [Go to top](#table-of-contents)
